@@ -11,20 +11,7 @@ class ProductTemplate(models.Model):
         default=True,
     )
 
-    def _get_combination_info(
-        self,
-        combination=False,
-        product_id=False,
-        add_qty=1,
-        parent_combination=False,
-        only_template=False,
-    ):
-        combination_info = super()._get_combination_info(
-            combination=combination,
-            product_id=product_id,
-            add_qty=add_qty,
-            parent_combination=parent_combination,
-            only_template=only_template,
-        )
-        combination_info.update({"has_secondary_uom": bool(self.secondary_uom_ids)})
-        return combination_info
+    def _get_website_secondary_uoms(self):
+        """Secondary units that can be picked by a customer in the shop."""
+        self.ensure_one()
+        return self.secondary_uom_ids._filter_website_published()
