@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="form_fee" inherit_id="payment.form">
         <xpath
@@ -42,8 +42,8 @@
     <template id="payment_fee" name="Payment Fee" inherit_id="website_sale.total">
         <xpath expr="//tr[@name='o_order_total_untaxed']" position="before">
             <tr
-                id="order_payment_fee"
                 t-if="website_sale_order and any(l.payment_fee_line for l in website_sale_order.order_line)"
+                id="order_payment_fee"
             >
                 <td
                     class="ps-0 pt-0 pb-2 border-0 text-muted"
