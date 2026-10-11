@@ -12,7 +12,7 @@ registry.category("web_tour.tours").add("website_sale_order_type_tour", {
       expectUnloadPage: true,
     },
     {
-      trigger: "#add_to_cart",
+      trigger: '.js_product button[name="add_to_cart"]',
       run: "click",
     },
     {

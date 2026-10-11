@@ -83,7 +83,7 @@ class TestFrontend(HttpCase):
         self.website.sale_type_id = False
         self.partner.sale_type = self.sale_type
         admin = self.env.ref("base.user_admin")
-        website = self.env["website"].get_current_website().with_user(admin)
+        website = self.website.with_user(admin)
 
         pricelists = website.get_pricelist_available()
 
@@ -118,7 +118,7 @@ class TestFrontend(HttpCase):
         self.partner.sale_type = False
         self.website.sale_type_id = self.sale_type
         admin = self.env.ref("base.user_admin")
-        website = self.env["website"].get_current_website().with_user(admin)
+        website = self.website.with_user(admin)
 
         pricelists = website.get_pricelist_available()
 
