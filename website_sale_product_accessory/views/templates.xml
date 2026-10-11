@@ -79,7 +79,8 @@
                                         class="btn btn-primary btn-sm text-nowrap"
                                     >
                                         <i
-                                            class="d-md-none fa fa-shopping-cart"
+                                            class="d-md-none oi"
+                                            data-icon="shopping_cart"
                                             role="presentation"
                                         />
                                         <span

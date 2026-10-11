@@ -18,8 +18,9 @@ class ProductTemplate(models.Model):
         called from contexts other than a website request.
         """
         self.ensure_one()
-        website = self.env["website"].get_current_website()
-        prevent_zero_price = website.prevent_zero_price_sale
+        website = self.env.website or self.env["website"].search(
+            [("company_id", "in", self.env.companies.ids)], limit=1
+        )
         accessory_products = self._get_website_accessory_product()
         product_domain = self.env["website"]._product_domain()
         company_domain = self.env["product.product"]._check_company_domain(
@@ -30,6 +31,11 @@ class ProductTemplate(models.Model):
                 product.product_tmpl_id != self
                 and product.filtered_domain(product_domain)
                 and product.filtered_domain(company_domain)
-                and (not prevent_zero_price or product._get_contextual_price())
+                and not (
+                    website.prevent_sale
+                    and website._prevent_product_sale(
+                        product, not product._get_contextual_price()
+                    )
+                )
             )
         )
