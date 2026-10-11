@@ -222,13 +222,15 @@ class TestWebsiteSaleOneTimeDeliveryAddress(WebsiteSaleCommon):
             }
         )
 
-        with MockRequest(
-            self.reseller_env, website=self.reseller_website, sale_order_id=so.id
+        with (
+            MockRequest(
+                self.reseller_env, website=self.reseller_website, sale_order_id=so.id
+            ),
+            self.assertRaises(Forbidden),
         ):
-            with self.assertRaises(Forbidden):
-                self.controller.shop_update_address(
-                    partner_id=one_time.id, address_type="delivery"
-                )
+            self.controller.shop_update_address(
+                partner_id=one_time.id, address_type="delivery"
+            )
 
     def test_checkout_values_expose_allow_dropship(self):
         """The order exposes the customer's allow_dropship flag via a related field."""
