@@ -5,12 +5,12 @@
         inherit_id="website_sale.products_categories_list"
         priority="999"
     >
-        <xpath expr="//a[@t-att-href='keep(shop_path)']" position="attributes">
+        <xpath expr="//a[@t-att-href='keep(shop_path, **reset_filters)']" position="attributes">
             <attribute
                 name="t-attf-class"
             >{{not category and not request.httprequest.path.startswith('/shop/my_regular_products') and 'text-decoration-underline'}} p-0</attribute>
         </xpath>
-        <xpath expr="//a[@t-att-href='keep(shop_path)']/.." position="after">
+        <xpath expr="//a[@t-att-href='keep(shop_path, **reset_filters)']/.." position="after">
             <li class="nav-item mb-1">
                 <a
                     href="/shop/my_regular_products"
