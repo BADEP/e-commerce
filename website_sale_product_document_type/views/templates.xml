@@ -27,14 +27,14 @@
                     />
                     <t
                         t-set="icon"
-                        t-value="attachment_sudo.type == 'url' and 'fa-link' or 'fa-download'"
+                        t-value="attachment_sudo.type == 'url' and 'link' or 'download'"
                     />
                     <a
                         class="list-group-item list-group-item-action"
                         t-att-href="'/shop/' + slug(product) + '/document/' + str(document_sudo.id)"
                         t-att-target="target"
                     >
-                        <i t-att-class="'fa ' + icon + ' me-2'" />
+                        <i class="oi me-2" t-att-data-icon="icon" />
                         <t t-out="attachment_sudo.name" />
                     </a>
                 </t>
@@ -58,14 +58,14 @@
                     />
                     <t
                         t-set="icon"
-                        t-value="attachment_sudo.type == 'url' and 'fa-link' or 'fa-download'"
+                        t-value="attachment_sudo.type == 'url' and 'link' or 'download'"
                     />
                     <a
                         class="list-group-item list-group-item-action"
                         t-att-href="'/shop/' + slug(product) + '/document/' + str(document_sudo.id)"
                         t-att-target="target"
                     >
-                        <i t-att-class="'fa ' + icon + ' me-2'" />
+                        <i class="oi me-2" t-att-data-icon="icon" />
                         <t t-out="attachment_sudo.name" />
                     </a>
                 </t>
@@ -75,7 +75,7 @@
 
     <template
         id="product_documents_by_type"
-        inherit_id="website_sale.product"
+        inherit_id="website_sale.documents"
         name="Product Page Documents Grouped by Type"
         priority="20"
     >
@@ -86,7 +86,10 @@
         list winning is a real risk if this module is combined first. Pin
         a priority above the default (16) so this view is always combined
         last and its own grouped-by-type rendering is what is shown. -->
-        <xpath expr="//div[@id='product_documents']/strong" position="attributes">
+        <xpath
+            expr="//div[@id='product_documents']/div[hasclass('attribute_name')]"
+            position="attributes"
+        >
             <attribute name="t-if">False</attribute>
         </xpath>
         <xpath

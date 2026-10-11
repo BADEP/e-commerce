@@ -1,12 +1,11 @@
 # Copyright 2026 Camptocamp SA (https://www.camptocamp.com).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-import base64
 
 from lxml import html
 
 from odoo.tests import HttpCase, tagged
 
-FAKE_CONTENT = base64.b64encode(b"fake document content")
+FAKE_CONTENT = b"fake document content"
 
 
 @tagged("post_install", "-at_install")
@@ -47,20 +46,20 @@ class TestWebsiteSaleProductDocumentTypeHttp(HttpCase):
             cls.Document.create(
                 {
                     "name": attachment_name,
-                    "datas": FAKE_CONTENT,
+                    "raw": FAKE_CONTENT,
                     "res_model": "product.template",
                     "res_id": cls.product.id,
                     "document_type_id": document_type.id,
-                    "shown_on_product_page": True,
+                    "attached_on_sale": "shown_on_product_page",
                 }
             )
         cls.Document.create(
             {
                 "name": "Notes.pdf",
-                "datas": FAKE_CONTENT,
+                "raw": FAKE_CONTENT,
                 "res_model": "product.template",
                 "res_id": cls.product.id,
-                "shown_on_product_page": True,
+                "attached_on_sale": "shown_on_product_page",
             }
         )
 
