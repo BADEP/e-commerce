@@ -16,7 +16,7 @@ registry.category("web_tour.tours").add("website_sale_vat_required_tour", {
     },
     {
       content: "Add product to cart",
-      trigger: "#add_to_cart",
+      trigger: '.js_product button[name="add_to_cart"]',
       run: "click",
     },
     tourUtils.goToCart({quantity: 1}),

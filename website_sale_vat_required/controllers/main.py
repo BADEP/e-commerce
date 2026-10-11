@@ -7,12 +7,6 @@ from odoo.addons.website_sale.controllers.main import WebsiteSale
 
 
 class WebsiteSale(WebsiteSale):
-    def _get_mandatory_billing_address_fields(self, country_sudo):
-        field_names = super()._get_mandatory_billing_address_fields(country_sudo)
-        if "vat" not in field_names:
-            field_names |= {"vat"}
-        return field_names
-
     def _prepare_address_form_values(self, *args, **kwargs):
         rendering_values = super()._prepare_address_form_values(*args, **kwargs)
         address_type = kwargs.get("address_type")
