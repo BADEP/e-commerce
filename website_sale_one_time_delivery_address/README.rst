@@ -21,13 +21,13 @@ Website Sale One Time Delivery Address
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fe--commerce-lightgray.png?logo=github
-    :target: https://github.com/OCA/e-commerce/tree/19.0/website_sale_one_time_delivery_address
+    :target: https://github.com/OCA/e-commerce/tree/20.0/website_sale_one_time_delivery_address
     :alt: OCA/e-commerce
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/e-commerce-19-0/e-commerce-19-0-website_sale_one_time_delivery_address
+    :target: https://translation.odoo-community.org/projects/e-commerce-20-0/e-commerce-20-0-website_sale_one_time_delivery_address
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/e-commerce&target_branch=19.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/e-commerce&target_branch=20.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -45,15 +45,15 @@ billing partner.
 
 Main behavior:
 
-- adds an *Allow Drop-shipping* flag on the customer that gates the
-  whole flow: the one-time delivery option is only shown for customers
-  that allow drop-shipping
-- adds a one-time delivery toggle to the checkout page
-- creates checkout delivery contacts with type ``one_time_delivery``
-- keeps the invoice address on the reseller
-- keeps the shipping address on the temporary end-customer contact
-- makes one-time delivery contacts available in the checkout delivery
-  address list
+-  adds an *Allow Drop-shipping* flag on the customer that gates the
+   whole flow: the one-time delivery option is only shown for customers
+   that allow drop-shipping
+-  adds a one-time delivery toggle to the checkout page
+-  creates checkout delivery contacts with type ``one_time_delivery``
+-  keeps the invoice address on the reseller
+-  keeps the shipping address on the temporary end-customer contact
+-  makes one-time delivery contacts available in the checkout delivery
+   address list
 
 **Table of contents**
 
@@ -88,14 +88,14 @@ To use this module, you need to:
 
 Result:
 
-- a child contact is created on the reseller with type
-  ``one_time_delivery``
-- the sale order shipping partner points to that new contact
-- the sale order invoice partner remains the reseller, even if the
-  browser submits a delivery-as-billing value
-- the *Same as delivery address* toggle is hidden while the option is
-  enabled, so the temporary delivery address can never be reused as the
-  billing address
+-  a child contact is created on the reseller with type
+   ``one_time_delivery``
+-  the sale order shipping partner points to that new contact
+-  the sale order invoice partner remains the reseller, even if the
+   browser submits a delivery-as-billing value
+-  the *Same as delivery address* toggle is hidden while the option is
+   enabled, so the temporary delivery address can never be reused as the
+   billing address
 
 If the shopper disables the option, the standard website sale delivery
 address behavior is kept and a regular ``delivery`` address is created
@@ -116,7 +116,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/e-commerce/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/e-commerce/issues/new?body=module:%20website_sale_one_time_delivery_address%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/e-commerce/issues/new?body=module:%20website_sale_one_time_delivery_address%0Aversion:%2020.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -141,6 +141,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/e-commerce <https://github.com/OCA/e-commerce/tree/19.0/website_sale_one_time_delivery_address>`_ project on GitHub.
+This module is part of the `OCA/e-commerce <https://github.com/OCA/e-commerce/tree/20.0/website_sale_one_time_delivery_address>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

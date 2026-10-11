@@ -4,7 +4,7 @@
 {
     "name": "Website Sale One Time Delivery Address",
     "summary": "Create one-time delivery contacts from checkout delivery addresses",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "development_status": "Beta",
     "category": "Website",
     "website": "https://github.com/OCA/e-commerce",

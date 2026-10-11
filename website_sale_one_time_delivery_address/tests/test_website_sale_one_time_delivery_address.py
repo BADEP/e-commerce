@@ -1,10 +1,13 @@
 # Copyright 2026 Camptocamp
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import json
+
 from werkzeug.exceptions import Forbidden
 
 from odoo.fields import Command
 from odoo.tests import tagged
+from odoo.tools import json_default
 
 from odoo.addons.website_sale.tests.common import MockRequest, WebsiteSaleCommon
 from odoo.addons.website_sale_one_time_delivery_address.controllers.main import (
@@ -28,6 +31,8 @@ class TestWebsiteSaleOneTimeDeliveryAddress(WebsiteSaleCommon):
     user's partner, so anonymous/superuser requests would otherwise move the
     cart onto an unrelated partner.
     """
+
+    _test_user_groups = None
 
     @classmethod
     def setUpClass(cls):
@@ -84,6 +89,10 @@ class TestWebsiteSaleOneTimeDeliveryAddress(WebsiteSaleCommon):
             sale_order_id=sale_order.id,
         ) as req:
             req.httprequest.method = "POST"
+            # http routes must return a real response in 20 (like core mock_request)
+            req.make_json_response = lambda data, *_a, **_kw: json.dumps(
+                data, default=json_default
+            )
             self.controller.shop_address_submit(**form)
         return sale_order
 
