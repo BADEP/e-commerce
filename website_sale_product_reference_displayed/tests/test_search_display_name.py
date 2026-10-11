@@ -17,6 +17,7 @@ class TestSearchDisplayName(TransactionCase):
             "displayDescription": False,
             "displayExtraLink": False,
             "displayDetail": False,
+            "display_currency": cls.website.currency_id,
         }
 
     def _get_detail(self):
@@ -26,14 +27,14 @@ class TestSearchDisplayName(TransactionCase):
 
     def test_search_detail_uses_display_name_when_active(self):
         self.view.active = True
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         detail = self._get_detail()
         self.assertEqual(detail["mapping"]["name"]["name"], "display_name")
         self.assertIn("display_name", detail["fetch_fields"])
 
     def test_search_detail_keeps_name_when_inactive(self):
         self.view.active = False
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         detail = self._get_detail()
         self.assertEqual(detail["mapping"]["name"]["name"], "name")
         self.assertNotIn("display_name", detail["fetch_fields"])

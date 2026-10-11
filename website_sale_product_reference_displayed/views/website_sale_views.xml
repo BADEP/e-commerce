@@ -5,7 +5,7 @@
     <template
         id="products_item"
         name="Display product reference"
-        inherit_id="website_sale.products_item"
+        inherit_id="website_sale.product_title_and_details"
     >
         <!-- Product title in list -->
         <xpath expr="//span[@t-field='product.name']" position="attributes">
@@ -20,8 +20,8 @@
         name="Display product reference"
         inherit_id="website_sale.product"
     >
-        <xpath expr="//t[@t-set='additional_title']" position="after">
-            <t t-set="additional_title" t-value="product.display_name" />
+        <xpath expr="//t[@t-call='website.layout']" position="attributes">
+            <attribute name="additional_title">product.display_name</attribute>
         </xpath>
         <!-- Breadcrumb -->
         <xpath expr="//span[@t-field='product.name']" position="attributes">
