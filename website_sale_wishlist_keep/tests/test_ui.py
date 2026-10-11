@@ -3,7 +3,7 @@
 from odoo.tests import tagged
 from odoo.tests.common import HttpCase
 
-from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+from odoo.addons.base.tests.common import DISABLED_MAIL_CREATE_CONTEXT
 
 
 @tagged("-at_install", "post_install")
@@ -11,7 +11,7 @@ class TestUi(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CREATE_CONTEXT))
         cls.env["product.template"].create(
             {
                 "name": "Test Product",

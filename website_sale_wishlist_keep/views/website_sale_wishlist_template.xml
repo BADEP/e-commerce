@@ -2,11 +2,11 @@
 <odoo>
     <!-- Odoo 19 removed the "keep in wishlist" checkbox from
         website_sale_wishlist (see odoo/odoo@b414047), so this module
-        has to add it back. -->
+        has to add it back. Since Odoo 20 the wishlist is part of website_sale. -->
     <template
         id="wishlist_keep_checkbox"
         name="Wishlist keep in cart checkbox"
-        inherit_id="website_sale_wishlist.product_wishlist"
+        inherit_id="website_sale.product_wishlist"
     >
         <xpath expr="//div[hasclass('o_wishlist_products_header')]" position="after">
             <div class="checkbox mb-3">

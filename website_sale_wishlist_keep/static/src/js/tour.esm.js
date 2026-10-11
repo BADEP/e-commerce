@@ -44,7 +44,7 @@ registry.category("web_tour.tours").add("website_sale_wishlist_keep", {
     },
     {
       content: "Add product to cart",
-      trigger: ".o_wish_add",
+      trigger: '.o_wishlist_item button[name="add_to_cart"]',
       run: "click",
     },
     {
