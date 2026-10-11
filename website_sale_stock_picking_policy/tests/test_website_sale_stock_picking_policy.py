@@ -97,6 +97,5 @@ class TestWebsiteSaleStockPickingPolicy(BaseCommon):
 
     def test_update_picking_policy_without_cart_raises(self):
         """A missing cart should raise a user-facing error."""
-        with self._mock_request(cart=False):
-            with self.assertRaises(UserError):
-                self.controller.update_picking_policy("one")
+        with self._mock_request(cart=False), self.assertRaises(UserError):
+            self.controller.update_picking_policy("one")
