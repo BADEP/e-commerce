@@ -24,7 +24,7 @@ class ProductTemplate(models.Model):
         if not has_filterable_line:
             return None
         ptals = self.valid_product_template_attribute_line_ids
-        attrib_categories = ptals._prepare_categories_for_display_in_specs_table()
+        attrib_categories = ptals._prepare_categories_for_display()
         if not attrib_categories:
             return None
         return {

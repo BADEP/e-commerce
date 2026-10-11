@@ -1,15 +1,15 @@
-import {WebsiteSale} from "@website_sale/interactions/website_sale";
+import {ProductPage} from "@website_sale/interactions/product_page";
 import {markup} from "@odoo/owl";
 import {patch} from "@web/core/utils/patch";
 import {setElementContent} from "@web/core/utils/html";
 
-patch(WebsiteSale.prototype, {
+patch(ProductPage.prototype, {
   /**
    * Adds the specs table refresh to the regular _onChangeCombination method
    * @override
    */
-  _onChangeCombination(...args) {
-    super._onChangeCombination(...args);
+  async _onChangeCombination(...args) {
+    await super._onChangeCombination(...args);
     this._onChangeCombinationSpecsTable(...args);
     this._onChangeCombinationSpecsAccordion(...args);
   },

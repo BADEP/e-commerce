@@ -15,7 +15,7 @@ class TestWebsiteSaleComparisonSpecificationExclusion(TransactionCase):
         the specs table must show only the value actually selected in the
         current combination, exactly like the comparison page shows each
         compared product's own actual value -- regardless of any
-        `exclude_for` configured on the other candidate values."""
+        `excluded_value_ids` configured on the other candidate values."""
         legs_attribute = self.env["product.attribute"].create(
             {
                 "name": "Legs",
@@ -54,23 +54,16 @@ class TestWebsiteSaleComparisonSpecificationExclusion(TransactionCase):
             }
         )
         legs_line, color_line = product.attribute_line_ids
-        steel, aluminium = legs_line.product_template_value_ids
-        white, black = color_line.product_template_value_ids
-        aluminium.exclude_for = [
-            Command.create(
-                {
-                    "product_tmpl_id": product.id,
-                    "value_ids": [Command.link(black.id)],
-                }
-            )
-        ]
+        _steel, aluminium = legs_line.product_template_value_ids
+        _white, black = color_line.product_template_value_ids
+        aluminium.excluded_value_ids = [Command.link(black.id)]
 
         displayed = color_line._get_display_value_ids(aluminium + black)
 
         self.assertEqual(displayed, black.product_attribute_value_id)
 
     def test_display_value_ids_ignores_unrelated_conflicts_in_combination(self):
-        """A non-variant-defining line with no `exclude_for` of its own must
+        """A non-variant-defining line with no `excluded_value_ids` of its own must
         keep showing all of its values, even when the rest of the given
         combination is itself internally conflicting (e.g. two mutually
         exclusive variant-defining values were both selected). The
@@ -130,26 +123,12 @@ class TestWebsiteSaleComparisonSpecificationExclusion(TransactionCase):
         )
         color_line, size_line, note_line = product.attribute_line_ids
         red = color_line.product_template_value_ids
-        size_1, size_2 = size_line.product_template_value_ids
+        size_1, _size_2 = size_line.product_template_value_ids
         hello, world = note_line.product_template_value_ids
         # Red and Size 1 mutually exclude each other; Note has no
-        # exclude_for of its own at all.
-        red.exclude_for = [
-            Command.create(
-                {
-                    "product_tmpl_id": product.id,
-                    "value_ids": [Command.link(size_1.id)],
-                }
-            )
-        ]
-        size_1.exclude_for = [
-            Command.create(
-                {
-                    "product_tmpl_id": product.id,
-                    "value_ids": [Command.link(red.id)],
-                }
-            )
-        ]
+        # excluded_value_ids of its own at all.
+        red.excluded_value_ids = [Command.link(size_1.id)]
+        size_1.excluded_value_ids = [Command.link(red.id)]
 
         displayed = note_line._get_display_value_ids(red + size_1 + hello)
 
@@ -204,22 +183,8 @@ class TestWebsiteSaleComparisonSpecificationExclusion(TransactionCase):
         size_line, weight_line = product.attribute_line_ids
         size_1, size_2 = size_line.product_template_value_ids
         weight_1, weight_2 = weight_line.product_template_value_ids
-        weight_1.exclude_for = [
-            Command.create(
-                {
-                    "product_tmpl_id": product.id,
-                    "value_ids": [Command.link(size_2.id)],
-                }
-            )
-        ]
-        weight_2.exclude_for = [
-            Command.create(
-                {
-                    "product_tmpl_id": product.id,
-                    "value_ids": [Command.link(size_1.id)],
-                }
-            )
-        ]
+        weight_1.excluded_value_ids = [Command.link(size_2.id)]
+        weight_2.excluded_value_ids = [Command.link(size_1.id)]
         return product, size_1, size_2, weight_line, weight_1, weight_2
 
     def test_display_value_ids_excludes_incompatible_values(self):
@@ -292,8 +257,8 @@ class TestWebsiteSaleComparisonSpecificationExclusion(TransactionCase):
     def test_get_specs_table_html_hides_single_custom_value_line(self):
         """A non-variant-defining line whose only value is marked "custom"
         must stay hidden from the refreshed specs table, matching the
-        initial page render (`website_sale_comparison.product_attributes_body`),
-        which filters it out via `_prepare_categories_for_display_in_specs_table`."""
+        initial page render (`website_sale.product_attributes_body`),
+        which filters it out via `_prepare_categories_for_display`."""
         product, size_1, _size_2, _weight_line, weight_1, _weight_2 = (
             self._create_sized_product_with_weight_exclusions()
         )
