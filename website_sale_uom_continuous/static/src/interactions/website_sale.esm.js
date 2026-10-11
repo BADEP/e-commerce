@@ -2,24 +2,10 @@
 // @author Iván Todorovich <ivan.todorovich@gmail.com>
 // License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import {WebsiteSale} from "@website_sale/interactions/website_sale";
+import {ProductPage} from "@website_sale/interactions/product_page";
 import {patch} from "@web/core/utils/patch";
 
-patch(WebsiteSale.prototype, {
-  /**
-   * Core sends the quantity with `parseInt` when computing the combination info:
-   * https://github.com/odoo/odoo/blob/b3e4ddcbcc3a6a5a28f18f70342dcd584432faef/addons/website_sale/static/src/js/variant_mixin.js#L29
-   * These params are merged after it, so the quantity keeps its decimals:
-   * https://github.com/odoo/odoo/blob/b3e4ddcbcc3a6a5a28f18f70342dcd584432faef/addons/website_sale/static/src/js/variant_mixin.js#L32
-   *
-   * @override
-   */
-  _getOptionalCombinationInfoParam(parent) {
-    const params = super._getOptionalCombinationInfoParam(...arguments);
-    const addQty = parseFloat(parent.querySelector('input[name="add_qty"]')?.value);
-    return isNaN(addQty) ? params : {...params, add_qty: addQty};
-  },
-
+patch(ProductPage.prototype, {
   /**
    * Only allow integer quantities for UoMs that are not continuous.
    *

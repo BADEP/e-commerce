@@ -13,7 +13,7 @@ patch(ProductConfiguratorDialog.prototype, {
    */
   async _setQuantity(productTmplId, quantity) {
     const product = this._findProduct(productTmplId);
-    const isInteger = this.props.isFrontend && !product?.uom.is_continuous;
+    const isInteger = this.websiteSaleProps?.isFrontend && !product?.uom.is_continuous;
     return super._setQuantity(
       productTmplId,
       isInteger ? Math.trunc(quantity) : quantity
@@ -27,7 +27,7 @@ patch(ProductConfiguratorDialog.prototype, {
    */
   _handleUnitOfMeasureUpdate(product) {
     super._handleUnitOfMeasureUpdate(...arguments);
-    if (this.props.isFrontend && !product.uom.is_continuous) {
+    if (this.websiteSaleProps?.isFrontend && !product.uom.is_continuous) {
       product.quantity = Math.trunc(product.quantity) || 1;
     }
   },

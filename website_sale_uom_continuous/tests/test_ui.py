@@ -8,6 +8,8 @@ from odoo.tests import HttpCase, tagged
 
 @tagged("post_install", "-at_install")
 class TestUi(HttpCase):
+    _test_user_groups = None
+
     def test_cart_quantity_decimals(self):
         washer, _powder = self.env["product.template"].create(
             [
@@ -33,7 +35,7 @@ class TestUi(HttpCase):
                 "optional_product_ids": [Command.set(washer.ids)],
             }
         )
-        self.start_tour("/", "website_sale_uom_continuous", login="admin")
+        self.start_tour("/shop", "website_sale_uom_continuous", login="admin")
 
     def test_quick_reorder_decimals(self):
         powder = self.env["product.product"].create(
@@ -47,7 +49,7 @@ class TestUi(HttpCase):
         order = self.env["sale.order"].create(
             {
                 "partner_id": self.env.ref("base.user_admin").partner_id.id,
-                "website_id": self.env["website"].get_current_website().id,
+                "website_id": self.env.ref("base.default_website").id,
                 "order_line": [
                     Command.create({"product_id": powder.id, "product_uom_qty": 2.5})
                 ],

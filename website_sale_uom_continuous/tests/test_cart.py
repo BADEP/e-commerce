@@ -40,7 +40,7 @@ class TestCart(WebsiteSaleUomContinuousCommon):
             self.assertEqual(line.product_uom_qty, 2.5)
             values = self._add_to_cart(self.product_kg, 1.1)
             self.assertEqual(line.product_uom_qty, 3.6)
-            added_qty = values["notification_info"]["lines"][0]["quantity"]
+            added_qty = values["notifications"][0]["data"]["lines"][0]["quantity"]
             self.assertEqual(added_qty, 1.1)
 
     def test_update_cart_continuous_uom(self):

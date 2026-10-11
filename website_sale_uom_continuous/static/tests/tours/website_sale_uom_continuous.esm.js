@@ -25,7 +25,7 @@ registry.category("web_tour.tours").add("website_sale_uom_continuous", {
       trigger: 'input[name="add_qty"]',
       run: "edit 2.5 && click body",
     },
-    {trigger: "#add_to_cart", run: "click"},
+    {trigger: '.js_product button[name="add_to_cart"]', run: "click"},
     {trigger: "a sup.my_cart_quantity:text(1)"},
     {trigger: "a[href='/shop']", run: "click", expectUnloadPage: true},
     // Product page: other UoMs only allow integer quantities.
@@ -39,7 +39,7 @@ registry.category("web_tour.tours").add("website_sale_uom_continuous", {
       content: "The bolt quantity is truncated to an integer",
       trigger: 'input[name="add_qty"]:value(/^2$/)',
     },
-    {trigger: "#add_to_cart", run: "click"},
+    {trigger: '.js_product button[name="add_to_cart"]', run: "click"},
     // Product configurator: other UoMs only allow integer quantities.
     {trigger: `${configuratorQuantity("Decimal Bolt")}:value(/^2$/)`},
     {

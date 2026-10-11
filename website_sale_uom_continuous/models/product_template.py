@@ -8,15 +8,28 @@ from odoo import models
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    def _get_additionnal_combination_info(
-        self, product_or_template, quantity, uom, date, website
+    def _get_additional_combination_info(
+        self,
+        product_or_template,
+        quantity,
+        uom,
+        website,
+        pricelist,
+        fiscal_position,
+        **kwargs,
     ):
         # OVERRIDE: let the product page only allow decimal quantities for
         # continuous UoMs.
         if not uom._is_continuous():
             quantity = int(quantity) or 1.0
-        combination_info = super()._get_additionnal_combination_info(
-            product_or_template, quantity, uom, date, website
+        combination_info = super()._get_additional_combination_info(
+            product_or_template,
+            quantity,
+            uom,
+            website,
+            pricelist,
+            fiscal_position,
+            **kwargs,
         )
         combination_info["uom_is_continuous"] = uom._is_continuous()
         return combination_info

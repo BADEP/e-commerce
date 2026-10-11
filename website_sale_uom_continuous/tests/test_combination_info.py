@@ -15,10 +15,10 @@ from .common import WebsiteSaleUomContinuousCommon
 class TestCombinationInfo(WebsiteSaleUomContinuousCommon):
     def test_uom_is_continuous(self):
         """The combination info tells whether the UoM allows decimal quantities."""
-        with MockRequest(self.env, website=self.website):
-            info = self.product._get_combination_info_variant()
+        with MockRequest(self.env, website=self.website) as request:
+            info = self.product.with_env(request.env)._get_combination_info_variant()
             self.assertFalse(info["uom_is_continuous"])
-            info = self.product_kg._get_combination_info_variant()
+            info = self.product_kg.with_env(request.env)._get_combination_info_variant()
             self.assertTrue(info["uom_is_continuous"])
 
     def test_price_integer_quantity(self):

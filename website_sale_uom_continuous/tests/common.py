@@ -31,6 +31,7 @@ class WebsiteSaleUomContinuousCommon(WebsiteSaleCommon):
                 "website_published": True,
             }
         )
+        cls.pricelist = cls._enable_pricelists()
         cls.pricelist.item_ids = [
             Command.create(
                 {

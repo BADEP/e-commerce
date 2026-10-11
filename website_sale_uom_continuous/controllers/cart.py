@@ -15,7 +15,7 @@ class WebsiteSaleUomContinuousCart(Cart):
         # https://github.com/odoo/odoo/blob/b3e4ddcbcc3a6a5a28f18f70342dcd584432faef/addons/website_sale/controllers/cart.py#L114
         # The cart gets the requested one through its context instead, keyed by the
         # added product (see ``sale.order._cart_add``).
-        order_sudo = request.cart or request.website._create_cart()
+        order_sudo = request.cart or self.env.website._create_cart()
         request.cart = order_sudo.with_context(
             website_sale_uom_continuous_add_qty={product_id: float(quantity)}
         )

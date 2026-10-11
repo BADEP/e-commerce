@@ -14,6 +14,8 @@ from .common import WebsiteSaleUomContinuousCommon
 
 @tagged("post_install", "-at_install")
 class TestProductConfigurator(WebsiteSaleUomContinuousCommon):
+    _test_user_groups = None
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -29,6 +31,12 @@ class TestProductConfigurator(WebsiteSaleUomContinuousCommon):
             - The configurator opens with 1 unit, and a UoM that is not continuous.
             - The configurator opens with 2.56 kg, and a continuous UoM.
         """
+        # Since 20.0, the frontend configurator only opens for products with
+        # optional products (or several variants / UoMs).
+        optional_product = self._create_product(name="Optional")
+        (
+            self.product + self.product_kg
+        ).product_tmpl_id.optional_product_ids = optional_product.product_tmpl_id.ids
         for product, quantity, expected_quantity, is_continuous in (
             (self.product, 1.5, 1, False),
             (self.product_kg, 2.555, 2.56, True),

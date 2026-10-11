@@ -5,7 +5,7 @@
 {
     "name": "Website Sale UoM Continuous",
     "summary": "Sell decimal quantities of products in continuous UoMs (kg, L, m, ...)",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "author": "Camptocamp, Odoo Community Association (OCA)",
     "maintainers": ["ivantodorovich"],
     "website": "https://github.com/OCA/e-commerce",
