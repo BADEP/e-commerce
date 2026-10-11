@@ -3,8 +3,7 @@
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
     <template id="confirmation_order_error">
-        <t t-call="website.layout">
-            <t t-set="additional_title">Shop - Confirmation - Error</t>
+        <t t-call="website.layout" additional_title.translate="Shop - Confirmation - Error">
             <div id="wrap">
                 <div class="container oe_website_sale">
                     <div class="row">
