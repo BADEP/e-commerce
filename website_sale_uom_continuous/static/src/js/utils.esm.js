@@ -13,11 +13,11 @@
  * @returns {*} the result of `fn`
  */
 export function withDecimals(fn) {
-    const originalParseInt = globalThis.parseInt;
-    globalThis.parseInt = (value) => parseFloat(value);
-    try {
-        return fn();
-    } finally {
-        globalThis.parseInt = originalParseInt;
-    }
+  const originalParseInt = globalThis.parseInt;
+  globalThis.parseInt = (value) => parseFloat(value);
+  try {
+    return fn();
+  } finally {
+    globalThis.parseInt = originalParseInt;
+  }
 }

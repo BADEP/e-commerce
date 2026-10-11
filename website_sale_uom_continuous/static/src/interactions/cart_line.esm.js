@@ -9,21 +9,21 @@ import {session} from "@web/session";
 import {withDecimals} from "@website_sale_uom_continuous/js/utils.esm";
 
 patch(CartLine.prototype, {
-    /**
-     * Core parses the quantity with `parseInt` before sending it to the server,
-     * which drops its decimals:
-     * https://github.com/odoo/odoo/blob/b3e4ddcbcc3a6a5a28f18f70342dcd584432faef/addons/website_sale/static/src/interactions/cart_line.js#L56
-     *
-     * The quantity is also rounded, to avoid displaying floating point noise
-     * (e.g. 1.6800000000000002) after using the +/- buttons.
-     *
-     * @override
-     */
-    _changeQuantity(input) {
-        const quantity = parseFloat(input.value);
-        if (!isNaN(quantity)) {
-            input.value = roundDecimals(quantity, session.product_unit_digits ?? 2);
-        }
-        return withDecimals(() => super._changeQuantity(...arguments));
-    },
+  /**
+   * Core parses the quantity with `parseInt` before sending it to the server,
+   * which drops its decimals:
+   * https://github.com/odoo/odoo/blob/b3e4ddcbcc3a6a5a28f18f70342dcd584432faef/addons/website_sale/static/src/interactions/cart_line.js#L56
+   *
+   * The quantity is also rounded, to avoid displaying floating point noise
+   * (e.g. 1.6800000000000002) after using the +/- buttons.
+   *
+   * @override
+   */
+  _changeQuantity(input) {
+    const quantity = parseFloat(input.value);
+    if (!isNaN(quantity)) {
+      input.value = roundDecimals(quantity, session.product_unit_digits ?? 2);
+    }
+    return withDecimals(() => super._changeQuantity(...arguments));
+  },
 });
