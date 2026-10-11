@@ -13,11 +13,10 @@ class WebsiteSaleHttpCase(HttpCase):
         self.provider = self.env.ref("payment.payment_provider_transfer")
         self.provider.write(
             {
-                "state": "enabled",
+                "is_live": True,
                 "is_published": True,
             }
         )
-        self.provider._transfer_ensure_pending_msg_is_set()
         self.partner = self.env.ref("base.partner_admin")
         # VAT required by the module website_sale_vat_required
         self.partner.vat = "US01234567891"

@@ -7,14 +7,22 @@ registry.category("web_tour.tours").add("website_sale_acquirer_confirm_order", {
   url: "/shop",
   steps: () => [
     ...tourUtils.searchProduct("Customizable Desk", {select: true}),
+    ...tourUtils.addToCartFromProductPage(),
     {
-      content: "click on add to cart",
-      trigger: "#product_detail form #add_to_cart",
+      content: "Add to cart from the product configurator",
+      trigger:
+        '.modal button[name="website_sale_product_configurator_continue_button"]',
       run: "click",
     },
     tourUtils.goToCart({quantity: 1}),
     tourUtils.goToCheckout(),
     tourUtils.confirmOrder(),
+    {
+      content: "Select `Wire Transfer` payment method",
+      trigger:
+        'input[name="o_payment_radio"][data-payment-method-code="wire_transfer"]',
+      run: "click",
+    },
     ...tourUtils.pay({expectUnloadPage: true, waitFinalizeYourPayment: true}),
     {
       content: "Confirmation page should be shown",
