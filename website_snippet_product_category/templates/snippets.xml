@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="snippets" inherit_id="website.snippets">
         <xpath expr="//snippets[@id='snippet_content']" position="inside">
@@ -27,8 +27,8 @@
                 <div class="d-flex d-flex-row">
                     <div
                         t-if="category.image_128"
-                        t-field="category.image_128"
                         class="categ_img pe-1"
+                        t-field="category.image_128"
                         t-options="{'widget': 'image','resize': '24x24' }"
                     />
                     <a

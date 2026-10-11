@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo noupdate="1">
     <record id="website_sale.public_category_desks" model="product.public.category">
         <field name="published_in_product_category_snippet" eval="True" />
