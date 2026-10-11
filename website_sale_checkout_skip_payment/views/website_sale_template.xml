@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <!-- Copyright 2017 Sergio Teruel <sergio.teruel@tecnativa.com>
          License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
@@ -26,9 +26,9 @@
             position="after"
         >
             <div
+                t-if="website.checkout_skip_payment"
                 class="alert alert-info"
                 role="alert"
-                t-if="website.checkout_skip_payment"
             >
                 <span t-field="website.website_sale_checkout_skip_message" />
             </div>

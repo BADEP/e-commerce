@@ -17,7 +17,7 @@ class WebsiteSaleHttpCase(odoo.tests.HttpCase):
         cls.partner = cls.env.ref("base.partner_admin")
         # VAT required by the module website_sale_vat_required
         cls.partner.vat = "US01234567891"
-        cls.partner.with_context(**{"res_partner_search_mode": "customer"}).write(
+        cls.partner.with_context(res_partner_search_mode="customer").write(
             {"skip_website_checkout_payment": True}
         )
         cls.env["product.template"].create(
