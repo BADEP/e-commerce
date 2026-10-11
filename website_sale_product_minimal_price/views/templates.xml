@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2019 Tecnativa - Sergio Teruel
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
@@ -14,8 +14,8 @@
             <t t-if="template_price_vals.get('distinct_prices')">
                 <span>From</span>
                 <span
-                    class="h6 mb-0"
                     t-if="template_price_vals['price'] or not website.prevent_zero_price_sale"
+                    class="h6 mb-0"
                     t-out="template_price_vals['price']"
                     t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
                 />

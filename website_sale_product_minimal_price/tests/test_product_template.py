@@ -114,20 +114,22 @@ class TestProductTemplateMinimalPrice(TransactionCase):
     def test_first_possible_combination(self):
         with patch.object(type(self.product_tmpl), "_get_cheapest_info") as mock_cheap:
             mock_cheap.return_value = (self.variant1, 1, True)
-            with patch.object(
-                type(self.variant1),
-                "valid_product_template_attribute_line_ids",
-                new=self.product_tmpl.valid_product_template_attribute_line_ids,
-            ):
-                with patch.object(
+            with (
+                patch.object(
+                    type(self.variant1),
+                    "valid_product_template_attribute_line_ids",
+                    new=self.product_tmpl.valid_product_template_attribute_line_ids,
+                ),
+                patch.object(
                     type(self.variant1),
                     "product_template_attribute_value_ids",
                     new=self.env["product.template.attribute.value"],
-                ):
-                    res = self.product_tmpl.with_context(
-                        website_id=self.website.id
-                    )._get_first_possible_combination()
-                    self.assertTrue(res)
+                ),
+            ):
+                res = self.product_tmpl.with_context(
+                    website_id=self.website.id
+                )._get_first_possible_combination()
+                self.assertTrue(res)
 
     def test_combination_info_lines(self):
         from odoo.addons.website_sale.tests.common import MockRequest
