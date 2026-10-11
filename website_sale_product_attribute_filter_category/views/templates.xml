@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2019 Tecnativa - Sergio Teruel
      Copyright 2020 Tecnativa - Alexandre D. Díaz
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
@@ -50,8 +50,8 @@
                         >
                             <h2
                                 t-if="isMobile"
-                                class="accordion-header mb-0"
                                 t-attf-id="o_wsale_offcanvas_category_{{attr_category[0] or 0}}_header"
+                                class="accordion-header mb-0"
                             >
                                 <button
                                     t-attf-class="o_wsale_offcanvas_title accordion-button rounded-0 {{'' if _cat_expand else 'collapsed'}}"
