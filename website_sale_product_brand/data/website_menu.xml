@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo noupdate="1">
     <!-- Menu in website for Brand -->
     <record id="menu_website_sale_brand" model="website.menu">

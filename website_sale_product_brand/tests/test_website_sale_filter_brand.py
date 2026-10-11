@@ -213,34 +213,38 @@ class WebsiteSale(BaseCommon):
 
     def test_product_brands_controller(self):
         self.brand.website_published = True
-        with MockRequest(self.env, website=self.website):
-            with patch(
+        with (
+            MockRequest(self.env, website=self.website),
+            patch(
                 "odoo.addons.website_sale_product_brand.controllers.main.request.render"
-            ) as mock_render:
-                mock_render.return_value = Response("Mocked Response")
-                res = self.WebsiteSaleController.product_brands()
-                self.assertEqual(res.status_code, 200)
-                args, kwargs = mock_render.call_args
-                self.assertNotIn("search", args[1])
+            ) as mock_render,
+        ):
+            mock_render.return_value = Response("Mocked Response")
+            res = self.WebsiteSaleController.product_brands()
+            self.assertEqual(res.status_code, 200)
+            args, kwargs = mock_render.call_args
+            self.assertNotIn("search", args[1])
 
-                res = self.WebsiteSaleController.product_brands(search=self.brand.name)
-                self.assertEqual(res.status_code, 200)
-                args, kwargs = mock_render.call_args
-                self.assertEqual(args[1]["search"], self.brand.name)
+            res = self.WebsiteSaleController.product_brands(search=self.brand.name)
+            self.assertEqual(res.status_code, 200)
+            args, kwargs = mock_render.call_args
+            self.assertEqual(args[1]["search"], self.brand.name)
 
     def test_product_brands_controller_filters_other_websites(self):
-        with MockRequest(self.env, website=self.website):
-            with patch(
+        with (
+            MockRequest(self.env, website=self.website),
+            patch(
                 "odoo.addons.website_sale_product_brand.controllers.main.request.render"
-            ) as mock_render:
-                mock_render.return_value = Response("Mocked Response")
-                res = self.WebsiteSaleController.product_brands()
-                self.assertEqual(res.status_code, 200)
-                args, kwargs = mock_render.call_args
-                brand_rec = args[1]["brand_rec"]
-                self.assertIn(self.brand, brand_rec)
-                self.assertIn(self.global_brand, brand_rec)
-                self.assertNotIn(self.other_brand, brand_rec)
+            ) as mock_render,
+        ):
+            mock_render.return_value = Response("Mocked Response")
+            res = self.WebsiteSaleController.product_brands()
+            self.assertEqual(res.status_code, 200)
+            args, kwargs = mock_render.call_args
+            brand_rec = args[1]["brand_rec"]
+            self.assertIn(self.brand, brand_rec)
+            self.assertIn(self.global_brand, brand_rec)
+            self.assertNotIn(self.other_brand, brand_rec)
 
     def test_brand_filter_display_mode_default(self):
         self.assertEqual(self.website.brand_filter_display_mode, "list")
@@ -285,65 +289,73 @@ class WebsiteSale(BaseCommon):
 
     def test_get_brand_rpc_domain_with_category_and_attribute_values(self):
         category = self.env["product.public.category"].create({"name": "Test Category"})
-        with MockRequest(self.env, website=self.website):
-            with patch.object(
+        with (
+            MockRequest(self.env, website=self.website),
+            patch.object(
                 self.WebsiteSaleController, "_get_shop_domain_no_brands"
-            ) as mock_domain:
-                mock_domain.return_value = [("id", "in", self.product.ids)]
-                domain = self.WebsiteSaleController._get_brand_rpc_domain(
-                    search="Test",
-                    category_id=category.id,
-                    attribute_values=["1-2,3"],
-                )
+            ) as mock_domain,
+        ):
+            mock_domain.return_value = [("id", "in", self.product.ids)]
+            domain = self.WebsiteSaleController._get_brand_rpc_domain(
+                search="Test",
+                category_id=category.id,
+                attribute_values=["1-2,3"],
+            )
         self.assertEqual(domain, [("id", "in", self.product.ids)])
         args, kwargs = mock_domain.call_args
         self.assertEqual(args[0], "Test")
         self.assertEqual(args[1], category)
 
     def test_brand_filter_load_more(self):
-        with MockRequest(self.env, website=self.website):
-            with patch.object(
+        with (
+            MockRequest(self.env, website=self.website),
+            patch.object(
                 self.WebsiteSaleController,
                 "_render_brand_items",
                 return_value="<div>brands</div>",
-            ):
-                result = self.WebsiteSaleController.brand_filter_load_more(
-                    offset=0,
-                    limit=2,
-                    brand_ids=[str(self.selected_brand.id)],
-                    exclude_brand_ids=[str(self.brand.id)],
-                )
+            ),
+        ):
+            result = self.WebsiteSaleController.brand_filter_load_more(
+                offset=0,
+                limit=2,
+                brand_ids=[str(self.selected_brand.id)],
+                exclude_brand_ids=[str(self.brand.id)],
+            )
         self.assertEqual(result["html"], "<div>brands</div>")
         self.assertTrue(result["has_more"])
         self.assertEqual(result["next_offset"], 2)
 
     def test_brand_filter_load_letter(self):
-        with MockRequest(self.env, website=self.website):
-            with patch.object(
+        with (
+            MockRequest(self.env, website=self.website),
+            patch.object(
                 self.WebsiteSaleController,
                 "_render_brand_items",
                 return_value="<div>a-brands</div>",
-            ) as mock_render:
-                result = self.WebsiteSaleController.brand_filter_load_letter(
-                    letter="A",
-                    offset=0,
-                    limit=50,
-                )
+            ) as mock_render,
+        ):
+            result = self.WebsiteSaleController.brand_filter_load_letter(
+                letter="A",
+                offset=0,
+                limit=50,
+            )
         self.assertEqual(result["html"], "<div>a-brands</div>")
         brands = mock_render.call_args.args[0]
         self.assertTrue(all(brand.name.startswith("A") for brand in brands))
 
     def test_brand_filter_load_letter_non_alpha(self):
-        with MockRequest(self.env, website=self.website):
-            with patch.object(
+        with (
+            MockRequest(self.env, website=self.website),
+            patch.object(
                 self.WebsiteSaleController,
                 "_render_brand_items",
                 return_value="<div>other-brands</div>",
-            ) as mock_render:
-                result = self.WebsiteSaleController.brand_filter_load_letter(
-                    letter="#",
-                    offset=0,
-                    limit=50,
-                )
+            ) as mock_render,
+        ):
+            result = self.WebsiteSaleController.brand_filter_load_letter(
+                letter="#",
+                offset=0,
+                limit=50,
+            )
         self.assertEqual(result["html"], "<div>other-brands</div>")
         self.assertIn(self.numeric_brand, mock_render.call_args.args[0])

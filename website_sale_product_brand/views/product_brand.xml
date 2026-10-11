@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <!-- Page template for displaying Brands -->
     <template id="product_brands" name="Brands">
@@ -43,7 +43,7 @@
                                                 t-att-alt="o.name"
                                             />
                                             <div class="card-body border-0">
-                                                <span t-esc="o.name" />
+                                                <span t-out="o.name" />
                                             </div>
                                         </a>
                                     </div>

@@ -110,8 +110,9 @@ class WebsiteSale(WebsiteSaleBase):
         elif search or category:
             domain = Domain.AND([domain, [("product_ids", "in", search_products.ids)]])
         return brand_model.search(domain).filtered(
-            lambda x: x.published_products_count > 0
-            or x.show_without_published_products
+            lambda x: (
+                x.published_products_count > 0 or x.show_without_published_products
+            )
         )
 
     def _get_product_counts_by_brand_ids(self, domain):
@@ -556,8 +557,9 @@ class WebsiteSale(WebsiteSaleBase):
             product_brand.sudo()
             .search(domain)
             .filtered(
-                lambda x: x.published_products_count > 0
-                or x.show_without_published_products
+                lambda x: (
+                    x.published_products_count > 0 or x.show_without_published_products
+                )
             )
         )
 
