@@ -54,8 +54,8 @@ class Website(models.Model):
                 with self.env.cr.savepoint():
                     cart.message_post(body=self.env._("Cart expired"))
                     cart.action_cancel()
-            except Exception as e:
-                _logger.exception("Unable to cancel expired cart %s: %s", cart, e)
+            except Exception:
+                _logger.exception("Unable to cancel expired cart %s", cart)
             else:
                 if autocommit:
                     self.env.cr.commit()  # pylint: disable=invalid-commit
