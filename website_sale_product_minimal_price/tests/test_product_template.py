@@ -10,7 +10,7 @@ class TestProductTemplateMinimalPrice(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.website = cls.env["website"].get_current_website()
+        cls.website = cls.env.ref("base.default_website")
         cls.category = cls.env["product.category"].create({"name": "Test Category"})
         cls.sub_category = cls.env["product.category"].create(
             {"name": "Sub Category", "parent_id": cls.category.id}
@@ -43,6 +43,8 @@ class TestProductTemplateMinimalPrice(TransactionCase):
             }
         )
 
+        # Odoo 20: the website is taken from the context (env.website)
+        cls.product_tmpl = cls.product_tmpl.with_context(website_id=cls.website.id)
         cls.variant1 = cls.product_tmpl.product_variant_ids[0]
         cls.variant2 = cls.product_tmpl.product_variant_ids[1]
 
@@ -63,12 +65,18 @@ class TestProductTemplateMinimalPrice(TransactionCase):
             accumulator = self.env["product.pricelist"]
             accumulator |= res
             self.assertEqual(accumulator, pricelist)
-        with patch.object(
-            type(self.website), "_get_and_cache_current_pricelist"
-        ) as mock_get_cache:
+        # Odoo 20: the website pricelist is cached in the request session, so
+        # it is only used inside a request.
+        with (
+            patch.object(
+                type(self.website), "_get_and_cache_current_pricelist"
+            ) as mock_get_cache,
+            MockRequest(self.env, website=self.website),
+        ):
             mock_get_cache.return_value = self.env["product.pricelist"].create(
                 {"name": "Cache Pricelist"}
             )
+            request.pricelist = None
             res = self.product_tmpl._get_website_current_pricelist(self.website)
             self.assertEqual(res, mock_get_cache.return_value)
 
@@ -107,7 +115,7 @@ class TestProductTemplateMinimalPrice(TransactionCase):
                 ],
             }
         )
-        product, qty, distinct = self.product_tmpl._get_cheapest_info(pl)
+        product, _qty, distinct = self.product_tmpl._get_cheapest_info(pl)
         self.assertEqual(product, self.variant1)
         self.assertTrue(distinct)
 
@@ -216,7 +224,7 @@ class TestProductTemplateMinimalPrice(TransactionCase):
         mapping = {
             "name": {"name": "name", "type": "text"},
             "website_url": {"name": "website_url", "type": "text"},
-            "detail": {
+            "search_item_metadata": {
                 "name": "price",
                 "type": "html",
                 "display_currency": self.website.currency_id,
@@ -236,7 +244,7 @@ class TestProductTemplateMinimalPrice(TransactionCase):
     def test_minimal_search_price_without_distinct_prices(self):
         pl = self.env["product.pricelist"].create({"name": "Search Regular PL"})
         mapping = {
-            "detail": {
+            "search_item_metadata": {
                 "display_currency": self.website.currency_id,
             },
         }
@@ -261,7 +269,16 @@ class TestProductTemplateMinimalPrice(TransactionCase):
             "name": {"name": "name", "type": "text"},
             "website_url": {"name": "website_url", "type": "text"},
         }
-        with MockRequest(self.env, website=self.website):
+        # Odoo 20 core always expects the "search_item_metadata" mapping to
+        # render prices: neutralize it to check this module's own early return.
+        with (
+            MockRequest(self.env, website=self.website),
+            patch.object(
+                type(self.product_tmpl),
+                "_search_render_results_prices",
+                return_value=None,
+            ),
+        ):
             result = self.product_tmpl._search_render_results(
                 ["id", "name", "website_url"], mapping, "fa-shopping-cart", 5
             )[0]

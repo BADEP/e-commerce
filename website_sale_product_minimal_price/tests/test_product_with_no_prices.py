@@ -91,7 +91,7 @@ class TestProductWithNoPrices(HttpCase):
                         {
                             "applied_on": "2_product_category",
                             "categ_id": self.category.id,
-                            "compute_price": "formula",
+                            "compute_price": "markup",
                             "base": "pricelist",
                             "base_pricelist_id": self.pricelist_aux.id,
                         },
@@ -104,4 +104,4 @@ class TestProductWithNoPrices(HttpCase):
 
     def test_ui_website(self):
         """Test frontend tour."""
-        self.start_tour("/", "test_product_with_no_prices", login="admin")
+        self.start_tour("/shop", "test_product_with_no_prices", login="admin")

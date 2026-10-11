@@ -2,23 +2,22 @@
  * Copyright 2025 Carlos Lopez - Tecnativa
  * License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). */
 
-import {WebsiteSale} from "@website_sale/interactions/website_sale";
+import {ProductPage} from "@website_sale/interactions/product_page";
 import {formatCurrency} from "@web/core/currency";
 import {patch} from "@web/core/utils/patch";
 import {renderToString} from "@web/core/utils/render";
 
-patch(WebsiteSale.prototype, {
-  _onChangeCombination(ev, parent, combination) {
-    super._onChangeCombination(...arguments);
-    if (!this.isWebsite || combination.product_id === false) {
+patch(ProductPage.prototype, {
+  async _onChangeCombination(ev, parent, combination) {
+    await super._onChangeCombination(...arguments);
+    if (combination.product_id === false) {
       return;
     }
 
     const unitPrices = combination.minimal_price_scale || [];
     const visiblePrices = unitPrices.filter((line) => line.price !== 0);
     const uomName = combination.uom_name;
-    const form =
-      parent?.querySelector("form") || document.querySelector(".js_product form");
+    const form = parent || document.querySelector(".js_product");
     if (!form) {
       return;
     }

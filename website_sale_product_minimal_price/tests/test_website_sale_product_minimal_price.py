@@ -11,7 +11,7 @@ class WebsiteSaleProductMinimalPriceHttpCase(HttpCase):
         super().setUp()
         # Create and select a pricelist
         # to make tests pass no matter what l10n package is enabled
-        self.website = self.env["website"].get_current_website()
+        self.website = self.env.ref("base.default_website")
         pricelist = self.env["product.pricelist"].create(
             {
                 "name": "website_sale_product_minimal_price public",

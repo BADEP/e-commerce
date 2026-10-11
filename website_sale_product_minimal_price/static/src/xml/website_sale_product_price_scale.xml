@@ -2,16 +2,16 @@
 <templates>
     <t t-name="website_sale_product_minimal_price.title">
         <h5 class="temporal">
-            <strong>Prices per quantity ( <span t-out="uom" /> )</strong>
+            <strong>Prices per quantity ( <span t-out="this.uom" /> )</strong>
         </h5>
     </t>
     <t t-name="website_sale_product_minimal_price.pricelist">
         <div class="col-3 text-center">
             <div>
-                <strong>≥<span t-out="quantity" /></strong>
+                <strong>≥<span t-out="this.quantity" /></strong>
             </div>
             <div>
-                <span t-out="price" />
+                <span t-out="this.price" />
             </div>
         </div>
     </t>

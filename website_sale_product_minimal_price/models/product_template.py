@@ -13,7 +13,7 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     def _get_website_current_pricelist(self, website=None):
-        website = website or self.env["website"].get_current_website()
+        website = website or self.env.website
         if request and getattr(request, "pricelist", False):
             # In Odoo 19 request.pricelist is a lazy() proxy
             # (website_sale/models/ir_http.py). Returning it as-is makes the
@@ -22,7 +22,8 @@ class ProductTemplate(models.Model):
             # product.pricelist.__ior__, which no longer exists on recordsets,
             # raising AttributeError. Materialise it into a real recordset.
             return self.env["product.pricelist"].browse(request.pricelist.ids)
-        pricelist = website._get_and_cache_current_pricelist()
+        # The cached pricelist relies on the request session (Odoo 20)
+        pricelist = request and website._get_and_cache_current_pricelist()
         if pricelist:
             return pricelist
         return self.env.user.partner_id.property_product_pricelist
@@ -35,7 +36,7 @@ class ProductTemplate(models.Model):
             [
                 base_domain,
                 [
-                    ("compute_price", "=", "formula"),
+                    ("compute_price", "in", ("discount", "markup")),
                     ("base", "=", "pricelist"),
                     ("base_pricelist_id", "!=", False),
                 ],
@@ -103,19 +104,14 @@ class ProductTemplate(models.Model):
                     product_find = product
         return product_find, add_qty, has_distinct_price
 
-    def _get_first_possible_combination(
-        self, parent_combination=None, necessary_values=None
-    ):
+    def _get_first_possible_combination(self, necessary_values=None):
         """Get the cheaper product combination for the website view."""
-        res = super()._get_first_possible_combination(
-            parent_combination=parent_combination, necessary_values=necessary_values
-        )
+        res = super()._get_first_possible_combination(necessary_values=necessary_values)
         context = self.env.context
         if context.get("website_id") and self.product_variant_count > 1:
             # It only makes sense to change the default one when there are
             # more than one variants and we know the pricelist
-            current_website = self.env["website"].get_current_website()
-            pricelist = self._get_website_current_pricelist(current_website)
+            pricelist = self._get_website_current_pricelist(self.env.website)
             product = self._get_cheapest_info(pricelist)[0]
             # Rebuild the combination in the expected order
             res = self.env["product.template.attribute.value"]
@@ -135,6 +131,8 @@ class ProductTemplate(models.Model):
         add_qty=1,
         uom_id=False,
         only_template=False,
+        pricelist=None,
+        fiscal_position=None,
     ):
         combination_info = super()._get_combination_info(
             combination=combination,
@@ -142,6 +140,8 @@ class ProductTemplate(models.Model):
             add_qty=add_qty,
             uom_id=uom_id,
             only_template=only_template,
+            pricelist=pricelist,
+            fiscal_position=fiscal_position,
         )
         if only_template and not product_id:
             return combination_info
@@ -204,17 +204,17 @@ class ProductTemplate(models.Model):
         )._get_contextual_price()
         return self.env["ir.qweb.field.monetary"].value_to_html(
             product_price,
-            {"display_currency": mapping["detail"]["display_currency"]},
+            {"display_currency": mapping["search_item_metadata"]["display_currency"]},
         )
 
     def _search_render_results(self, fetch_fields, mapping, icon, limit):
         results_data = super()._search_render_results(
             fetch_fields, mapping, icon, limit
         )
-        if "detail" not in mapping:
+        if "search_item_metadata" not in mapping:
             return results_data
 
-        current_website = self.env["website"].get_current_website()
+        current_website = self.env.website
         for product, data in zip(self, results_data, strict=False):
             minimal_price = product._get_minimal_search_price(current_website, mapping)
             if minimal_price:
@@ -222,20 +222,23 @@ class ProductTemplate(models.Model):
                 data.pop("list_price", None)
         return results_data
 
-    def _get_sales_prices(self, website):
-        prices = super()._get_sales_prices(website)
+    def _get_sales_prices(self, pricelist_sudo, fiscal_position_sudo, website):
+        prices = super()._get_sales_prices(
+            pricelist_sudo, fiscal_position_sudo, website
+        )
         pricelist = self._get_website_current_pricelist(website)
         for template in self.filtered("is_published"):
             price_info = prices[template.id]
             product, add_qty, has_distinct_price = template._get_cheapest_info(
                 pricelist
             )
-            product_price_info = template._get_additionnal_combination_info(
+            product_price_info = template._get_additional_combination_info(
                 product,
                 quantity=add_qty,
                 uom=product.uom_id,
-                date=fields.Date.context_today(self),
                 website=website,
+                pricelist=pricelist,
+                fiscal_position=fiscal_position_sudo,
             )
             price_info.update(
                 distinct_prices=has_distinct_price,
