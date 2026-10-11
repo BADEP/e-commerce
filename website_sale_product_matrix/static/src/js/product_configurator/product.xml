@@ -38,9 +38,9 @@
         <xpath expr="//t[@t-set='isComboProduct']" position="after">
             <button
                 t-if="isMatrixProduct"
+                class="btn btn-primary text-nowrap"
                 type="button"
                 name="website_sale_product_matrix_configure_button"
-                class="btn btn-primary text-nowrap"
                 t-on-click="() => this.env.openProductMatrix(this.props.product_tmpl_id)"
             >
                 <i class="fa fa-cart-plus me-2" />

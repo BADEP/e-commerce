@@ -177,12 +177,15 @@ class WebsiteSaleProductMatrixCart(Cart):
             if qty > 0
         }
         matrix_lines = order_sudo.order_line.filtered(
-            lambda line: line.product_template_id == product_template
-            and not line.combo_item_id
+            lambda line: (
+                line.product_template_id == product_template and not line.combo_item_id
+            )
         )
         removed_lines = matrix_lines.filtered(
-            lambda line: (line.product_id, line.product_no_variant_attribute_value_ids)
-            not in kept_lines
+            lambda line: (
+                (line.product_id, line.product_no_variant_attribute_value_ids)
+                not in kept_lines
+            )
         )
         for line in removed_lines:
             order_sudo._cart_update_line_quantity(line.id, 0)

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="product_matrix" name="Product matrix">
         <div class="table-responsive">
@@ -16,7 +16,7 @@
                             >
                                 <th class="border-top-0 text-center">
                                     <t t-if="not column_header_first">
-                                        <span t-esc="column_header.get('name')" />
+                                        <span t-out="column_header.get('name')" />
                                         <t t-if="column_header.get('price')">
                                             <span
                                                 class="badge badge-pill badge-secondary"
@@ -26,7 +26,7 @@
                                                     style="white-space: nowrap;"
                                                 >
                                                 + <t
-                                                    t-esc="column_header['price']"
+                                                    t-out="column_header['price']"
                                                     t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
                                                 />
                                                 </span>
@@ -43,7 +43,7 @@
                         <t t-foreach="row" t-as="cell">
                             <t t-if="not (cell_first and not cell.get('name'))">
                                 <td t-if="cell.get('name')" class="text-left">
-                                    <strong t-esc="cell['name']" />
+                                    <strong t-out="cell['name']" />
                                     <t t-if="cell.get('price')">
                                         <span class="badge badge-pill badge-secondary">
                                             <span
@@ -51,7 +51,7 @@
                                                 style="white-space: nowrap;"
                                             >
                                                 <t
-                                                    t-esc="cell['price']"
+                                                    t-out="cell['price']"
                                                     t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
                                                 />
                                             </span>
@@ -118,8 +118,8 @@
         </xpath>
         <xpath expr="//section[@id='product_detail']">
             <div
-                class="modal fade"
                 id="modalMatrix"
+                class="modal fade"
                 tabindex="-1"
                 aria-labelledby="modalMatrixLabel"
                 aria-hidden="true"
@@ -128,9 +128,9 @@
                     <div class="modal-content">
                         <form
                             t-if="product.product_add_mode == 'matrix' and product._is_add_to_cart_possible()"
+                            id="product_matrix_form"
                             t-att-data-product_template_id="product.id"
                             method="POST"
-                            id="product_matrix_form"
                         >
                             <div class="modal-header">
                                 <h5 class="modal-title">Configure product options</h5>
@@ -192,13 +192,13 @@
         <xpath expr="//div[@id='add_to_cart_wrap']" position="after">
             <a
                 t-if="product.product_add_mode == 'matrix'"
+                class="btn btn-primary my-1 me-1 px-5 py-2 flex-grow-1 text-uppercase"
                 href="#modalMatrix"
                 data-bs-toggle="modal"
                 data-bs-target="#modalMatrix"
                 aria-expanded="false"
                 aria-controls="modalMatrix"
                 role="button"
-                class="btn btn-primary my-1 me-1 px-5 py-2 flex-grow-1 text-uppercase"
             ><i class="fa fa-cart-plus me-2" /> Configure options</a>
         </xpath>
         <xpath expr="//div[@id='add_to_cart_wrap']" position="attributes">
