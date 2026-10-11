@@ -26,19 +26,12 @@
         inherit_id="website_sale.products_item"
     >
         <xpath expr="//*[hasclass('product_price')]">
-            <t t-call="website_sale_b2x_alt_price.alt_price">
-                <t t-set="price" t-value="template_price_vals['price_reduce']" />
-                <t t-set="alt_price" t-value="template_price_vals['alt_price']" />
-                <t
-                    t-set="alt_list_price"
-                    t-value="template_price_vals['alt_list_price']"
-                />
-                <t
-                    t-set="has_discounted_price"
-                    t-value="template_price_vals['has_discounted_price']"
-                />
-                <t t-set="alt_field" t-value="template_price_vals['alt_field']" />
-            </t>
+            <t t-call="website_sale_b2x_alt_price.alt_price"
+                price="template_price_vals['price_reduce']"
+                alt_price="template_price_vals['alt_price']"
+                alt_list_price="template_price_vals['alt_list_price']"
+                has_discounted_price="template_price_vals['has_discounted_price']"
+                alt_field="template_price_vals['alt_field']"/>
         </xpath>
     </template>
     <template
@@ -47,31 +40,23 @@
         inherit_id="website_sale.product_price"
     >
         <xpath expr="//div[@name='product_price']" position="after">
-            <t t-call="website_sale_b2x_alt_price.alt_price">
-                <t t-set="price" t-value="combination_info['price']" />
-                <t t-set="alt_price" t-value="combination_info['alt_price']" />
-                <t
-                    t-set="alt_list_price"
-                    t-value="combination_info['alt_list_price']"
-                />
-                <t
-                    t-set="has_discounted_price"
-                    t-value="combination_info['has_discounted_price']"
-                />
-                <t t-set="alt_field" t-value="combination_info['alt_field']" />
-            </t>
+            <t t-call="website_sale_b2x_alt_price.alt_price"
+                price="combination_info['price']"
+                alt_price="combination_info['alt_price']"
+                alt_list_price="combination_info['alt_list_price']"
+                has_discounted_price="combination_info['has_discounted_price']"
+                alt_field="combination_info['alt_field']"/>
         </xpath>
     </template>
     <template
         id="sale_order_portal_template"
         inherit_id="sale.sale_order_portal_template"
     >
-        <!-- Keep the original t-else node in place to preserve the t-if/t-else structure. -->
-        <xpath expr="//t[@t-set='title']/h2[@t-else]" position="attributes">
+        <xpath expr="//t[@t-set='title']/h2" position="attributes">
             <attribute name="t-field" />
             <attribute name="t-out">(
                 sale_order.amount_total
-                if request.website.show_line_subtotals_tax_selection == 'tax_included'
+                if env.website.show_line_subtotals_tax_selection == 'tax_included'
                 else sale_order.amount_untaxed
             )</attribute>
             <attribute
@@ -79,40 +64,43 @@
             >{'widget': 'monetary', 'display_currency': sale_order.currency_id}</attribute>
             <attribute name="t-att-data-id">(
                 'total_amount'
-                if request.website.show_line_subtotals_tax_selection == 'tax_included'
+                if env.website.show_line_subtotals_tax_selection == 'tax_included'
                 else 'untaxed_amount'
             )</attribute>
         </xpath>
-        <xpath expr="//t[@t-set='title']/h2[@t-else]" position="after">
-            <!-- Only beside the order total: when a down payment is due, Odoo
-                 shows that amount instead and the order total is not on
-                 screen to have an alternative. -->
+        <xpath expr="//t[@t-set='title']/h2" position="after">
             <t
-                t-if="not sale_order._has_to_be_paid() or sale_order.prepayment_percent == 1.0"
+                t-if="env.website.show_line_subtotals_tax_selection == 'tax_included'"
             >
-                <t
-                    t-if="request.website.show_line_subtotals_tax_selection == 'tax_included'"
-                >
-                    <span class="text-nowrap">
-                        <span
-                            id="b2c_alt_amount"
-                            t-field="sale_order.amount_untaxed"
-                            data-id="untaxed_amount"
-                        />
-                        <small> (without taxes)</small>
-                    </span>
-                </t>
-                <t t-else="">
-                    <span class="text-nowrap">
-                        <span
-                            id="b2b_alt_amount"
-                            t-field="sale_order.amount_total"
-                            data-id="total_amount"
-                        />
-                        <small> (with taxes)</small>
-                    </span>
-                </t>
+                <span class="text-nowrap">
+                    <span
+                        id="b2c_alt_amount"
+                        t-field="sale_order.amount_untaxed"
+                        data-id="untaxed_amount"
+                    />
+                    <small> (without taxes)</small>
+                </span>
             </t>
+            <t t-else="">
+                <span class="text-nowrap">
+                    <span
+                        id="b2b_alt_amount"
+                        t-field="sale_order.amount_total"
+                        data-id="total_amount"
+                    />
+                    <small> (with taxes)</small>
+                </span>
+            </t>
+        </xpath>
+        <!-- Odoo 20 labels the sidebar total "Tax Included"; keep it accurate
+             when the untaxed amount is the main one. -->
+        <xpath expr="//t[@t-set='subtitle']" position="attributes">
+            <attribute
+                name="t-if"
+            >env.website.show_line_subtotals_tax_selection == 'tax_included'</attribute>
+        </xpath>
+        <xpath expr="//t[@t-set='subtitle']" position="after">
+            <t t-else="" t-set="subtitle">Tax Excluded</t>
         </xpath>
     </template>
 </data>

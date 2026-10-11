@@ -3,10 +3,10 @@
  * Copyright 2024 Carlos Lopez - Tecnativa
  * License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). */
 
-import {WebsiteSale} from "@website_sale/interactions/website_sale";
+import {ProductPage} from "@website_sale/interactions/product_page";
 import {patch} from "@web/core/utils/patch";
 
-patch(WebsiteSale.prototype, {
+patch(ProductPage.prototype, {
   /**
    * Add alt price onchange to the regular _onChangeCombination method.
    *

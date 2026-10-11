@@ -4,7 +4,7 @@
 from odoo.fields import Command
 from odoo.tests.common import HttpCase, tagged
 
-from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+from odoo.addons.base.tests.common import DISABLED_MAIL_CREATE_CONTEXT
 
 
 @tagged("post_install", "-at_install")
@@ -12,10 +12,10 @@ class UICase(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CREATE_CONTEXT))
         # Create and select a pricelist
         # to make tests pass no matter what l10n package is enabled
-        website = cls.env["website"].get_current_website()
+        website = cls.env.ref("base.default_website")
         pricelist = cls.env["product.pricelist"].create(
             {
                 "name": "website_sale_b2x_alt_price public",
@@ -131,8 +131,8 @@ class UICase(HttpCase):
                     Command.create(
                         {
                             "applied_on": "3_global",
-                            "compute_price": "percentage",
-                            "percent_price": 10,
+                            "compute_price": "discount",
+                            "price_discount": 10,
                         },
                     ),
                 ],

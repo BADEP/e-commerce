@@ -13,9 +13,11 @@ class ProductTemplate(models.Model):
         self,
         combination=False,
         product_id=False,
-        add_qty=1,
+        add_qty=1.0,
         uom_id=False,
         only_template=False,
+        pricelist=None,
+        fiscal_position=None,
     ):
         """Include alternative (un)taxed amount."""
         combination_info = super()._get_combination_info(
@@ -24,6 +26,8 @@ class ProductTemplate(models.Model):
             add_qty=add_qty,
             uom_id=uom_id,
             only_template=only_template,
+            pricelist=pricelist,
+            fiscal_position=fiscal_position,
         )
         product = (
             self.env["product.product"].browse(combination_info["product_id"]) or self
@@ -38,8 +42,8 @@ class ProductTemplate(models.Model):
         )
         return combination_info
 
-    def _get_sales_prices(self, website):
-        res = super()._get_sales_prices(website)
+    def _get_sales_prices(self, pricelist_sudo, fiscal_position_sudo, website):
+        res = super()._get_sales_prices(pricelist_sudo, fiscal_position_sudo, website)
         currency = website.currency_id
         for template in self:
             price_info = res[template.id]
@@ -53,7 +57,7 @@ class ProductTemplate(models.Model):
         return res
 
     def _get_alt_prices(self, product, list_price, price, has_discounted_price):
-        website = self.env["website"].get_current_website(fallback=False)
+        website = self.env.website
         if not website:
             return {}
         partner = self.env.user.partner_id

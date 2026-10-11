@@ -69,13 +69,13 @@ registry.category("web_tour.tours").add("website_sale_b2x_alt_price_b2b", {
     // Switch to "website_sale_b2x_alt_price discounted" pricelist
     {
       content: "open pricelist selector",
-      trigger: "div.o_pricelist_dropdown > a.dropdown-toggle",
+      trigger: 'header div[name="pricelist_selector"] .dropdown-toggle',
       run: "click",
     },
     {
       content: "select website_sale_b2x_alt_price discounted",
       trigger:
-        ".switcher_pricelist:contains(/^website_sale_b2x_alt_price discounted$/)",
+        'header div[name="pricelist_selector"] .dropdown-item:contains(/^website_sale_b2x_alt_price discounted$/)',
       run: "click",
       expectUnloadPage: true,
     },
@@ -122,13 +122,13 @@ registry.category("web_tour.tours").add("website_sale_b2x_alt_price_b2b", {
     // Change to "website_sale_b2x_alt_price public" pricelist; 10% discount disappears
     {
       content: "open pricelist selector",
-      trigger: "div.o_pricelist_dropdown > a.dropdown-toggle",
+      trigger: 'header div[name="pricelist_selector"] .dropdown-toggle',
       run: "click",
     },
     {
       content: "select website_sale_b2x_alt_price public",
       trigger:
-        "div.o_pricelist_dropdown .dropdown-menu .dropdown-item:contains(/^website_sale_b2x_alt_price public$/)",
+        'header div[name="pricelist_selector"] .dropdown-item:contains(/^website_sale_b2x_alt_price public$/)',
       run: "click",
       expectUnloadPage: true,
     },
