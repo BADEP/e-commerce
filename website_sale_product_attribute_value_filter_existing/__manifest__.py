@@ -3,7 +3,7 @@
 {
     "name": "Website Sale Attribute Value Existing",
     "summary": "Allow hide attributes values not used in variants",
-    "version": "19.0.1.0.1",
+    "version": "20.0.1.0.0",
     "development_status": "Production/Stable",
     "category": "Website",
     "website": "https://github.com/OCA/e-commerce",
@@ -17,10 +17,14 @@
     "data": ["views/templates.xml"],
     "assets": {
         "web.assets_tests": [
-            "/website_sale_product_attribute_value_filter_existing/static/src/js/"
-            "website_sale_product_attribute_value_filter_existing_tour.esm.js",
-            "/website_sale_product_attribute_value_filter_existing/static/src/js/"
-            "website_sale_product_attribute_value_filter_existing_search_desk_tour.esm.js",
+            (
+                "/website_sale_product_attribute_value_filter_existing/static/src/js/"
+                "website_sale_product_attribute_value_filter_existing_tour.esm.js"
+            ),
+            (
+                "/website_sale_product_attribute_value_filter_existing/static/src/js/"
+                "website_sale_product_attribute_value_filter_existing_search_desk_tour.esm.js"
+            ),
         ]
     },
 }

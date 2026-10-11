@@ -6,7 +6,7 @@
         id="filter_select_attributes"
         inherit_id="website_sale.filter_select_attributes"
     >
-        <xpath expr="//t[@t-foreach='a.value_ids']/option" position="attributes">
+        <xpath expr="//t[@t-foreach='pavs_per_attribute[a]']/option" position="attributes">
             <attribute
                 name="t-if"
             >not attr_values_used_ids or v.id in attr_values_used_ids</attribute>
@@ -36,12 +36,12 @@
         id="filter_pills_attributes"
         inherit_id="website_sale.filter_pills_attributes"
     >
-        <xpath expr="//t[@t-foreach='a.value_ids']/input" position="attributes">
+        <xpath expr="//t[@t-foreach='pavs_per_attribute[a]']/input" position="attributes">
             <attribute
                 name="t-if"
             >not attr_values_used_ids or v.id in attr_values_used_ids</attribute>
         </xpath>
-        <xpath expr="//t[@t-foreach='a.value_ids']/label" position="attributes">
+        <xpath expr="//t[@t-foreach='pavs_per_attribute[a]']/label" position="attributes">
             <attribute
                 name="t-if"
             >not attr_values_used_ids or v.id in attr_values_used_ids</attribute>
@@ -52,7 +52,7 @@
         id="filter_color_attributes"
         inherit_id="website_sale.filter_color_attributes"
     >
-        <xpath expr="//t[@t-foreach='a.value_ids']/label" position="attributes">
+        <xpath expr="//t[@t-foreach='pavs_per_attribute[a]']/label" position="attributes">
             <attribute
                 name="t-if"
             >not attr_values_used_ids or v.id in attr_values_used_ids</attribute>
@@ -62,7 +62,7 @@
         id="filter_image_attributes"
         inherit_id="website_sale.filter_image_attributes"
     >
-        <xpath expr="//t[@t-foreach='a.value_ids']/label" position="attributes">
+        <xpath expr="//t[@t-foreach='pavs_per_attribute[a]']/label" position="attributes">
             <attribute
                 name="t-if"
             >not attr_values_used_ids or v.id in attr_values_used_ids</attribute>

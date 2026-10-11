@@ -4,7 +4,7 @@ from lxml import html
 
 from odoo.tests.common import HttpCase, tagged
 
-from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+from odoo.addons.base.tests.common import DISABLED_MAIL_CREATE_CONTEXT
 
 # radio and multi attributes render differently above 20 values
 LARGE_ATTRIBUTE_SIZE = 25
@@ -16,7 +16,7 @@ class WebsiteSaleHttpCase(HttpCase):
     def setUpClass(cls):
         super().setUpClass()
 
-        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CREATE_CONTEXT))
         # Models
         ProductAttribute = cls.env["product.attribute"]
         ProductAttributeValue = cls.env["product.attribute.value"]
@@ -125,7 +125,7 @@ class WebsiteSaleHttpCase(HttpCase):
         # Active attribute's filter in /shop. By default it's disabled.
         cls.env.ref("website_sale.products_attributes").active = True
         cls.env.ref("website_sale.search").active = True
-        website = cls.env["website"].get_current_website()
+        website = cls.env.ref("base.default_website")
         cls.env["website"].with_context(website_id=website.id).viewref(
             "website_sale.products_attributes"
         ).active = True
@@ -140,8 +140,10 @@ class WebsiteSaleHttpCase(HttpCase):
                 "name": f"Test {display_type} {size}",
                 "display_type": display_type,
                 "create_variant": "no_variant",
+                # Letters, not digits: in 20 the shop search also matches
+                # attribute value names ("Test Product 1" would match "value 1")
                 "value_ids": [
-                    (0, 0, {"name": f"Test {display_type} value {i}"})
+                    (0, 0, {"name": f"Test {display_type} value {chr(65 + i)}"})
                     for i in range(size)
                 ],
             }
@@ -157,15 +159,17 @@ class WebsiteSaleHttpCase(HttpCase):
 
     def _assert_only_used_values(self, attribute):
         page = html.fromstring(self.url_open("/shop").content)
-        # Values render as checkbox inputs, or as options for select attributes
+        # Values render as checkbox inputs, or as options for select attributes,
+        # with "<attribute slug>/<value slug>" as value
+        attribute_slug = self.env["ir.http"]._slug(attribute)
         values = page.xpath(
             f"""
             //form[contains(concat(" ", @class, " "), " js_attributes ")]
             //*[self::input or self::option]
-            [starts-with(@value, "{attribute.id}-")]/@value
+            [starts-with(@value, "{attribute_slug}/")]/@value
             """
         )
-        rendered = {int(value.split("-")[1]) for value in values}
+        rendered = {int(value.rsplit("-", 1)[1]) for value in values}
         self.assertEqual(rendered, set(attribute.value_ids[:2].ids))
 
     def test_radio(self):
@@ -192,7 +196,7 @@ class WebsiteSaleHttpCase(HttpCase):
     def test_ui_website(self):
         # This test ensures that unused attributes are not visible in the filter panel.
         self.start_tour(
-            "/",
+            "/shop",
             "website_sale_product_attribute_value_filter_existing",
             login="admin",
         )
@@ -201,7 +205,7 @@ class WebsiteSaleHttpCase(HttpCase):
         # This test ensures that attributes not used in the products displayed after a
         # search are not visible in the filter panel.
         self.start_tour(
-            "/",
+            "/shop?search=Test+Product+1",
             "website_sale_product_attribute_value_filter_existing_search_desk",
             login="admin",
         )
