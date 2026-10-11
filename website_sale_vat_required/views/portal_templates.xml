@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <!-- The initial `required_fields` hidden input is a static literal in
          portal.address_form_fields, so the VAT asterisk only appeared after a
