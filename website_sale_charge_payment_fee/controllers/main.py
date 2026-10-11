@@ -55,7 +55,7 @@ class WebsiteSaleFee(WebsiteSale):
                 selected_method = payment_methods_sudo.filtered(
                     lambda method: method.id == int(payment_option_id)
                 )[:1]
-                selected_provider = selected_method.provider_ids.filtered(
+                selected_provider = selected_method.provider_id.filtered(
                     lambda provider: provider in providers_sudo
                 )[:1]
             if selected_provider:

@@ -2,11 +2,11 @@
 <odoo>
     <template id="form_fee" inherit_id="payment.form">
         <xpath
-            expr="//t[@t-call='payment.method_form']/t[@t-set='is_selected']"
+            expr="//t[@t-call='payment.method_form']"
             position="attributes"
         >
             <attribute
-                name="t-value"
+                name="is_selected"
                 add="not selected_token_id and pm_sudo.id == selected_payment_method"
                 separator=" or "
             />

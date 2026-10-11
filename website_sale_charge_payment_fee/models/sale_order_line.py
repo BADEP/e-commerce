@@ -11,6 +11,6 @@ class SaleOrderLine(models.Model):
 
     payment_fee_line = fields.Boolean("Payment fee line", readonly=True)
 
-    def _show_in_cart(self):
+    def _show_line_in_cart(self):
         self.ensure_one()
-        return super()._show_in_cart() and not self.payment_fee_line
+        return super()._show_line_in_cart() and not self.payment_fee_line

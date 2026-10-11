@@ -14,7 +14,7 @@ class TestPaymentFee(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.website = cls.env["website"].get_current_website()
+        cls.website = cls.env.ref("base.default_website")
         cls.partner = cls.env["res.partner"].create({"name": "Payment Fee Partner"})
         cls.fee_product = cls.env["product.product"].create(
             {
@@ -41,7 +41,7 @@ class TestPaymentFee(TransactionCase):
                 "charge_fee_product_id": cls.fee_product.id,
                 "charge_fee_type": "percentage",
                 "charge_fee_percentage": 10.0,
-                "state": "enabled",
+                "is_live": True,
                 "is_published": True,
             }
         )
@@ -73,7 +73,7 @@ class TestPaymentFee(TransactionCase):
         self.assertEqual(len(fee_line), 1)
         self.assertEqual(fee_line.price_unit, 10.0)
         self.assertEqual(order.amount_payment_fee, 10.0)
-        self.assertFalse(fee_line._show_in_cart())
+        self.assertFalse(fee_line._show_line_in_cart())
         self.assertNotIn(fee_line, order.website_order_line)
 
     def test_update_fee_line_fixed_without_fee_removes_existing_fee(self):
@@ -183,7 +183,7 @@ class TestPaymentFee(TransactionCase):
             {
                 "name": "Payment Fee Method",
                 "code": "payment_fee_method",
-                "provider_ids": [Command.link(self.provider.id)],
+                "provider_id": self.provider.id,
             }
         )
         res = SimpleNamespace(
@@ -213,7 +213,7 @@ class TestPaymentFee(TransactionCase):
             {
                 "name": "Single Payment Fee Method",
                 "code": "single_payment_fee_method",
-                "provider_ids": [Command.link(self.provider.id)],
+                "provider_id": self.provider.id,
             }
         )
         res = SimpleNamespace(
@@ -378,7 +378,7 @@ class TestUi(HttpCase):
                 "charge_fee_product_id": cls.product_product_service.id,
                 "charge_fee_type": "percentage",
                 "charge_fee_percentage": 10.00,
-                "state": "enabled",
+                "is_live": True,
                 "is_published": True,
             }
         )
@@ -388,10 +388,11 @@ class TestUi(HttpCase):
                 "code": "wire_transfer2",
                 "sequence": 1000,
                 "active": True,
-                "provider_ids": [Command.link(transfer_provider.id)],
+                "provider_id": transfer_provider.id,
             }
         )
-        transfer_provider.payment_method_ids = [Command.set([payment_method.id])]
+        # payment_method_ids is a One2many in 20.0: keep only the new method active
+        (transfer_provider.payment_method_ids - payment_method).active = False
         cls.portal_login = "payment_fee_portal"
         portal_user = new_test_user(
             cls.env,
@@ -434,7 +435,7 @@ class TestUi(HttpCase):
             }
         )
         with RecordCapturer(self.env["sale.order"], []) as capture:
-            self.start_tour("/", "payment_fee_tour", login=self.portal_login)
+            self.start_tour("/shop", "payment_fee_tour", login=self.portal_login)
         created_order = capture.records
         price = provider.charge_fee_fixed_price
         if (

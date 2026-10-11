@@ -13,12 +13,12 @@ registry.category("web_tour.tours").add("payment_fee_tour", {
     },
     {
       content: "add 3 into cart",
-      trigger: '#product_details input[name="add_qty"]',
+      trigger: '.js_product input[name="add_qty"]',
       run: "edit 3",
     },
     {
       content: "click on add to cart",
-      trigger: "#product_detail form #add_to_cart",
+      trigger: '.js_product button[name="add_to_cart"]',
       run: "click",
     },
     {
