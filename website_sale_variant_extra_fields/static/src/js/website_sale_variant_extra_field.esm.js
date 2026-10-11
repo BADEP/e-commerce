@@ -2,11 +2,11 @@
  * License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). */
 
 import {patch} from "@web/core/utils/patch";
-import {WebsiteSale} from "@website_sale/interactions/website_sale";
+import {ProductPage} from "@website_sale/interactions/product_page";
 
-patch(WebsiteSale.prototype, {
-  _onChangeCombination(ev, parent, combination) {
-    const res = super._onChangeCombination(...arguments);
+patch(ProductPage.prototype, {
+  async _onChangeCombination(ev, parent, combination) {
+    const res = await super._onChangeCombination(...arguments);
     const extraFields = combination.variant_extra_fields;
     if (!extraFields) {
       return res;

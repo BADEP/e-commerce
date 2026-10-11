@@ -6,11 +6,11 @@ from datetime import date
 
 from odoo.fields import Command
 from odoo.tests import TransactionCase, tagged
-from odoo.tools import format_date
+from odoo.tools import BinaryBytes, format_date
 
 from odoo.addons.website_sale.tests.common import MockRequest
 
-DUMMY_IMAGE = base64.b64encode(
+DUMMY_IMAGE = BinaryBytes(
     base64.b64decode(
         "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8Dw"
         "HwAFAAH/q842iQAAAABJRU5ErkJggg=="
@@ -35,7 +35,7 @@ class TestWebsiteSaleVariantExtraField(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.website = cls.env["website"].get_current_website()
+        cls.website = cls.env.ref("base.default_website")
         # Start from a clean configuration: the database may already have extra
         # fields configured, which would pollute the payload assertions.
         cls.website.shop_extra_field_ids.unlink()
@@ -213,9 +213,12 @@ class TestWebsiteSaleVariantExtraField(TransactionCase):
             ]
         )
         extra_field = self._create_extra_field("product.product", "pricelist_rule_ids")
+        rules = self.variant_1.pricelist_rule_ids
+        self.assertEqual(rules, rule_1 + rule_2)
+        # Rules are rendered in the order of the field (pricelist item _order).
         self.assertEqual(
             extra_field._render_value(self.variant_1),
-            ", ".join((rule_1 + rule_2).mapped("display_name")),
+            ", ".join(rules.mapped("display_name")),
         )
 
     def test_render_binary_field(self):
@@ -236,27 +239,28 @@ class TestWebsiteSaleVariantExtraField(TransactionCase):
 
     def test_combination_info_renders_current_variant_value(self):
         self._create_extra_field("product.product", "default_code")
-        with MockRequest(self.env, website=self.website):
-            info_1 = self.product_tmpl._get_combination_info(
-                product_id=self.variant_1.id
-            )
-            info_2 = self.product_tmpl._get_combination_info(
-                product_id=self.variant_2.id
-            )
+        with MockRequest(self.env, website=self.website) as request:
+            product_tmpl = self.product_tmpl.with_env(request.env)
+            info_1 = product_tmpl._get_combination_info(product_id=self.variant_1.id)
+            info_2 = product_tmpl._get_combination_info(product_id=self.variant_2.id)
         self.assertEqual(info_1["variant_extra_fields"], {"default_code": "REF-1"})
         self.assertEqual(info_2["variant_extra_fields"], {"default_code": "REF-2"})
 
     def test_combination_info_without_variant_extra_field(self):
         self._create_extra_field("product.template", "name")
-        with MockRequest(self.env, website=self.website):
-            info = self.product_tmpl._get_combination_info(product_id=self.variant_1.id)
+        with MockRequest(self.env, website=self.website) as request:
+            info = self.product_tmpl.with_env(request.env)._get_combination_info(
+                product_id=self.variant_1.id
+            )
         self.assertNotIn("variant_extra_fields", info)
 
     def test_combination_info_keeps_empty_value_key(self):
         self.variant_2.default_code = False
         self._create_extra_field("product.product", "default_code")
-        with MockRequest(self.env, website=self.website):
-            info = self.product_tmpl._get_combination_info(product_id=self.variant_2.id)
+        with MockRequest(self.env, website=self.website) as request:
+            info = self.product_tmpl.with_env(request.env)._get_combination_info(
+                product_id=self.variant_2.id
+            )
         # The key must stay in the payload so that the client side refresh can
         # hide the value that is not set on the newly selected variant.
         self.assertEqual(info["variant_extra_fields"], {"default_code": ""})

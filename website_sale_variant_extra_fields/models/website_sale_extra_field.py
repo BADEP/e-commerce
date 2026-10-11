@@ -95,7 +95,7 @@ class WebsiteSaleExtraField(models.Model):
         if field_id.ttype == "binary":
             return Markup(
                 '<a target="_blank" href="/web/content/%s/%s/%s?download=1">'
-                '<i class="fa fa-file"/></a>'
+                '<i class="oi oi-filled" data-icon="description"/></a>'
             ) % (field_id.model_id.model, record.id, self.name)
         rendered = self._get_converter().value_to_html(
             value, self._get_render_options()
