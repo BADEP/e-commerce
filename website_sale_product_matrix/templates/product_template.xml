@@ -70,7 +70,7 @@
                                             aria-label="Remove one"
                                             title="Remove one"
                                         >
-                                            <i class="fa fa-minus" />
+                                            <i class="oi" data-icon="remove" />
                                         </a>
                                         <input
                                             type="text"
@@ -87,7 +87,7 @@
                                             aria-label="Add one"
                                             title="Add one"
                                         >
-                                            <i class="fa fa-plus" />
+                                            <i class="oi" data-icon="add" />
                                         </a>
                                     </div>
                                     <span
@@ -109,12 +109,12 @@
         customize_show="True"
     >
         <xpath
-            expr="//div[@id='o_wsale_product_details_content']//t[@t-set='ul_class']"
+            expr="//div[@id='o_wsale_product_details_content']//t[@t-call='website_sale.variants']"
             position="attributes"
         >
-            <attribute name="t-valuef">
-                flex-column #{'d-none' if product.product_add_mode == 'matrix' else ''}
-            </attribute>
+            <attribute
+                name="ul_class.f"
+            >flex-column {{'d-none' if product.product_add_mode == 'matrix' else ''}}</attribute>
         </xpath>
         <xpath expr="//section[@id='product_detail']">
             <div
@@ -147,17 +147,14 @@
                                     name="csrf_token"
                                     t-att-value="request.csrf_token()"
                                 />
-                                <t t-call="website_sale_product_matrix.product_matrix">
-                                    <t
-                                        t-set="website_sale_order"
-                                        t-value="request.cart"
-                                    />
-                                    <t
-                                        t-set="product_matrix"
-                                        t-value="website_sale_order._get_matrix(product)"
-                                    />
-                                    <t t-set="show_buy_button" t-value="True" />
-                                </t>
+                                <t
+                                    t-set="website_sale_order"
+                                    t-value="request.cart"
+                                />
+                                <t t-call="website_sale_product_matrix.product_matrix"
+                                    website_sale_order="website_sale_order"
+                                    product_matrix="website_sale_order._get_matrix(product)"
+                                    show_buy_button="True"/>
                             </div>
                             <div class="modal-footer">
                                 <a
@@ -165,7 +162,8 @@
                                     class="btn btn-primary btn px-5 o_we_order_matrix"
                                     href="#"
                                 ><i
-                                    class="fa fa-shopping-cart me-2"
+                                    class="oi me-2"
+                                    data-icon="shopping_cart"
                                 />UPDATE CART WITH OPTIONS</a>
                             </div>
                         </form>
@@ -199,7 +197,7 @@
                 aria-expanded="false"
                 aria-controls="modalMatrix"
                 role="button"
-            ><i class="fa fa-cart-plus me-2" /> Configure options</a>
+            ><i class="oi me-2" data-icon="add_shopping_cart" /> Configure options</a>
         </xpath>
         <xpath expr="//div[@id='add_to_cart_wrap']" position="attributes">
             <attribute name="t-if">product.product_add_mode != 'matrix'</attribute>

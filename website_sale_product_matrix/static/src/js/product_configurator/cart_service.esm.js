@@ -17,18 +17,18 @@ patch(CartService.prototype, {
    */
   _openProductConfigurator(
     productTemplateId,
-    quantity,
-    uomId,
-    combination,
+    products,
+    optionalProducts,
+    currencyId,
     productCustomAttributeValues,
     options,
     additionalData
   ) {
     return super._openProductConfigurator(
       productTemplateId,
-      quantity,
-      uomId,
-      combination,
+      products,
+      optionalProducts,
+      currencyId,
       productCustomAttributeValues,
       options,
       {...additionalData, matrixSelection: {}}

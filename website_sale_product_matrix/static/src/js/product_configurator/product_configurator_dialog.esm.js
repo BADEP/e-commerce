@@ -6,20 +6,17 @@ import {ProductMatrixDialog} from "./product_matrix_dialog.esm";
 import {formatCurrency} from "@web/core/currency";
 import {patch} from "@web/core/utils/patch";
 import {rpc} from "@web/core/network/rpc";
+import {t, useProps} from "@odoo/owl";
 import {useService} from "@web/core/utils/hooks";
-import {useSubEnv} from "@odoo/owl";
-
-patch(ProductConfiguratorDialog, {
-  props: {
-    ...ProductConfiguratorDialog.props,
-    // Filled in with the variants of the matrix, to reach the cart request.
-    matrixSelection: {type: Object, optional: true},
-  },
-});
+import {useSubEnv} from "@web/owl2/utils";
 
 patch(ProductConfiguratorDialog.prototype, {
   setup() {
     super.setup(...arguments);
+    this.matrixProps = useProps({
+      // Filled in with the variants of the matrix, to reach the cart request.
+      matrixSelection: t.object().optional(),
+    });
     this.dialogService = useService("dialog");
     useSubEnv({openProductMatrix: this._openProductMatrix.bind(this)});
   },
@@ -32,7 +29,7 @@ patch(ProductConfiguratorDialog.prototype, {
    */
   _isMatrixProduct(product) {
     return Boolean(
-      this.props.isFrontend &&
+      this.websiteSaleProps?.isFrontend &&
       product?.is_matrix &&
       product.product_tmpl_id === this.env.mainProductTmplId
     );
@@ -105,8 +102,8 @@ patch(ProductConfiguratorDialog.prototype, {
    */
   async onConfirm() {
     const mainProduct = this._findProduct(this.env.mainProductTmplId);
-    if (this.props.matrixSelection && this._isMatrixProduct(mainProduct)) {
-      this.props.matrixSelection.matrix_changes = mainProduct.matrix_lines.map(
+    if (this.matrixProps.matrixSelection && this._isMatrixProduct(mainProduct)) {
+      this.matrixProps.matrixSelection.matrix_changes = mainProduct.matrix_lines.map(
         ({ptav_ids, qty}) => ({ptav_ids, qty})
       );
     }

@@ -22,7 +22,7 @@ class WebsiteSaleProductMatrix(WebsiteSale):
     )
     def cart_update_from_matrix(self, product_template_id, grid, **kw):
         """This route is called when adding a product to cart from the product matrix"""
-        sale_order = request.cart or request.website._create_cart()
+        sale_order = request.cart or self.env.website._create_cart()
         sale_order.update(
             {
                 "grid_product_tmpl_id": int(product_template_id),
@@ -73,8 +73,8 @@ class WebsiteSaleProductMatrixConfigurator(WebsiteSaleProductConfiguratorControl
             matrix = request.cart._get_matrix(product_template)
         else:
             matrix = product_template._get_template_matrix(
-                company_id=request.website.company_id,
-                currency_id=request.website.currency_id,
+                company_id=self.env.website.company_id,
+                currency_id=self.env.website.currency_id,
                 display_extra_price=True,
             )
         Ptav = request.env["product.template.attribute.value"]
@@ -148,7 +148,7 @@ class WebsiteSaleProductMatrixCart(Cart):
         # isn't used, as each variant has its own one.
         kwargs.pop("no_variant_attribute_value_ids", None)
         kwargs.pop("product_custom_attribute_values", None)
-        order_sudo = request.cart or request.website._create_cart()
+        order_sudo = request.cart or self.env.website._create_cart()
         product_template = request.env["product.template"].browse(
             int(product_template_id)
         )

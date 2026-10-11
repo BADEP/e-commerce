@@ -1,16 +1,14 @@
 /* Copyright 2026 Tecnativa - Carlos Roca
  * License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). */
 
-import {Product} from "@sale/js/product/product";
+import {Product, productProps} from "@sale/js/product/product";
 import {formatCurrency} from "@web/core/currency";
 import {patch} from "@web/core/utils/patch";
+import {t} from "@odoo/owl";
 
-patch(Product, {
-  props: {
-    ...Product.props,
-    is_matrix: {type: Boolean, optional: true},
-    matrix_lines: {type: Array, element: Object, optional: true},
-  },
+Object.assign(productProps, {
+  is_matrix: t.boolean().optional(),
+  matrix_lines: t.array(t.object()).optional(),
 });
 
 patch(Product.prototype, {
@@ -35,6 +33,6 @@ patch(Product.prototype, {
    * @returns {String} The price of the line.
    */
   getFormattedMatrixLinePrice(line) {
-    return formatCurrency(line.unit_price * line.qty, this.env.currency.id);
+    return formatCurrency(line.unit_price * line.qty, this.env.currencyId);
   },
 });

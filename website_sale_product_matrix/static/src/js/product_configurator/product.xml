@@ -5,7 +5,7 @@
     <t t-inherit="sale.Product" t-inherit-mode="extension">
         <xpath expr="//t[@t-foreach='this.props.attribute_lines']" position="after">
             <table
-                t-if="isMatrixProduct &amp;&amp; this.props.matrix_lines &amp;&amp; this.props.matrix_lines.length"
+                t-if="this.isMatrixProduct &amp;&amp; this.props.matrix_lines &amp;&amp; this.props.matrix_lines.length"
                 class="table table-sm mb-0 o_wsale_product_matrix_lines"
             >
                 <tbody>
@@ -17,9 +17,9 @@
                         <td t-out="line.name" />
                         <td class="text-end text-nowrap" t-out="line.qty" />
                         <td
-                            t-if="env.showPrice"
+                            t-if="this.env.showPrice"
                             class="text-end text-nowrap"
-                            t-out="getFormattedMatrixLinePrice(line)"
+                            t-out="this.getFormattedMatrixLinePrice(line)"
                         />
                     </tr>
                 </tbody>
@@ -30,20 +30,20 @@
             expr="//t[@name='sale_product_configurator_price']/.."
             position="attributes"
         >
-            <attribute name="t-if" add="!isMatrixProduct" separator=" &amp;&amp; " />
+            <attribute name="t-if" add="!this.isMatrixProduct" separator=" &amp;&amp; " />
         </xpath>
         <QuantityButtons position="attributes">
-            <attribute name="t-if" add="!isMatrixProduct" separator=" &amp;&amp; " />
+            <attribute name="t-if" add="!this.isMatrixProduct" separator=" &amp;&amp; " />
         </QuantityButtons>
         <xpath expr="//t[@t-set='isComboProduct']" position="after">
             <button
-                t-if="isMatrixProduct"
+                t-if="this.isMatrixProduct"
                 class="btn btn-primary text-nowrap"
                 type="button"
                 name="website_sale_product_matrix_configure_button"
                 t-on-click="() => this.env.openProductMatrix(this.props.product_tmpl_id)"
             >
-                <i class="fa fa-cart-plus me-2" />
+                <i class="oi me-2" data-icon="add_shopping_cart" />
                 Configure options
             </button>
         </xpath>

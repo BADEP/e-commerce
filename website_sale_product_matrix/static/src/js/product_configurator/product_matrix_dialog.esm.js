@@ -1,22 +1,23 @@
 /* Copyright 2026 Tecnativa - Carlos Roca
  * License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). */
 
-import {Component, markup, onMounted, useRef} from "@odoo/owl";
+import {Component, markup, onMounted, signal, t, useProps} from "@odoo/owl";
 import {Dialog} from "@web/core/dialog/dialog";
 
 export class ProductMatrixDialog extends Component {
   static components = {Dialog};
   static template = "website_sale_product_matrix.ProductMatrixDialog";
-  static props = {
+  props = useProps({
     // The matrix, rendered as in the product page.
-    html: String,
-    rows: Array,
-    save: Function,
-    close: Function,
-  };
+    html: t.string(),
+    rows: t.array(),
+    save: t.function(),
+    close: t.function(),
+  });
+
+  matrixRef = signal.ref();
 
   setup() {
-    this.matrixRef = useRef("matrix");
     this.matrixHtml = markup(this.props.html);
     this.cellsByPtavIds = new Map(
       this.props.rows
@@ -25,7 +26,7 @@ export class ProductMatrixDialog extends Component {
         .map((cell) => [String(cell.ptav_ids), cell])
     );
     onMounted(() => {
-      for (const input of this.matrixRef.el.querySelectorAll(".o_matrix_input")) {
+      for (const input of this.matrixRef().querySelectorAll(".o_matrix_input")) {
         input.value = this._getInputCell(input)?.qty || 0;
       }
     });
