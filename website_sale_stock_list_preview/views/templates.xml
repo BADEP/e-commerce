@@ -2,8 +2,8 @@
 <odoo>
     <template id="products_item" inherit_id="website_sale.products_item">
         <xpath
-            expr="//div[hasclass('o_wsale_product_information_text')]/.."
-            position="inside"
+            expr="//t[@t-call='website_sale.product_title_and_details']"
+            position="after"
         >
             <t t-set="stock" t-value="(products_stock or {}).get(product.id)" />
             <t t-if="stock">
@@ -38,7 +38,7 @@
                     <t t-if="has_out_of_stock_message" t-out="out_of_stock_message" />
                     <t t-elif="not allow_out_of_stock_order">
                         <div class="text-danger fw-bold">
-                            <i class="fa fa-times me-1" />
+                            <i class="oi me-1" data-icon="close" role="presentation" />
                             Out of Stock
                         </div>
                     </t>

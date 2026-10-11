@@ -105,7 +105,7 @@ class UICase(HttpCase):
             ]
         )
         # Ensure website lang is en_US.
-        website = cls.env["website"].get_current_website()
+        website = cls.env.ref("base.default_website")
         en_us = (
             cls.env["res.lang"]
             .with_context(active_test=False)

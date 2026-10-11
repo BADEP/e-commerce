@@ -2,8 +2,6 @@
 # Copyright 2020 Tecnativa - Carlos Dauden
 # Copyright 2025 Tecnativa - Pilar Vargas
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-from odoo.http import request
-
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 
 
@@ -11,10 +9,10 @@ class WebsiteSaleStockListPreview(WebsiteSale):
     def _get_additional_shop_values(self, values, **kwargs):
         res = super()._get_additional_shop_values(values, **kwargs)
 
-        products = values.get("products") or request.env["product.template"]
+        products = values.get("products") or self.env["product.template"]
         if not products:
             return res
-        website = request.env["website"].get_current_website()
+        website = self.env.website
         products_sudo = products.sudo().with_context(
             warehouse=website.sudo().warehouse_id.id,
         )
@@ -32,7 +30,6 @@ class WebsiteSaleStockListPreview(WebsiteSale):
                 "show_availability": tmpl.show_availability,
                 "available_threshold": tmpl.available_threshold,
                 "uom_name": tmpl.uom_name,
-                "uom_rounding": tmpl.uom_id.rounding,
             }
         res["products_stock"] = products_stock
         return res
