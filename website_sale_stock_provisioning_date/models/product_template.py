@@ -14,39 +14,12 @@ class ProductTemplate(models.Model):
         "shows the inventory of the product in the website shop."
     )
 
-    free_qty = fields.Float(
-        "Free To Use Quantity ",
-        compute="_compute_quantities",
-        search="_search_free_qty",
-        digits="Product Unit of Measure",
-        compute_sudo=False,
-    )
+    free_qty = fields.Float(search="_search_free_qty")
 
     def _search_free_qty(self, operator, value):
         domain = [("free_qty", operator, value)]
         product_variant_query = self.env["product.product"]._search(domain)
         return [("product_variant_ids", "in", product_variant_query)]
-
-    def _compute_free_qty_dict(self):
-        prod_available = {}
-        variants_available = {
-            p["id"]: p for p in self.product_variant_ids._origin.read(["free_qty"])
-        }
-        for template in self:
-            free_qty = 0
-            for p in template.product_variant_ids._origin:
-                free_qty += variants_available[p.id]["free_qty"]
-            prod_available.setdefault(
-                template.id, prod_available.get(template.id, {})
-            ).update({"free_qty": free_qty})
-        return prod_available
-
-    def _compute_quantities(self):
-        result = super()._compute_quantities()
-        res = self._compute_free_qty_dict()
-        for template in self:
-            template.free_qty = res[template.id]["free_qty"]
-        return result
 
     def _get_next_provisioning_date(self, company):
         return self.product_variant_ids._get_next_provisioning_date(company)
@@ -58,6 +31,8 @@ class ProductTemplate(models.Model):
         add_qty=1,
         uom_id=False,
         only_template=False,
+        pricelist=None,
+        fiscal_position=None,
     ):
         combination_info = super()._get_combination_info(
             combination=combination,
@@ -65,6 +40,8 @@ class ProductTemplate(models.Model):
             add_qty=add_qty,
             uom_id=uom_id,
             only_template=only_template,
+            pricelist=pricelist,
+            fiscal_position=fiscal_position,
         )
         if combination_info["product_id"]:
             product = (
@@ -74,9 +51,16 @@ class ProductTemplate(models.Model):
             )
         else:
             product = self.sudo()
-        website = self.env["website"].get_current_website()
+        website = self.env.website
         provisioning_date = False
-        free_qty = website._get_product_available_qty(product)
+        free_qty = sum(
+            website._get_product_available_qty(variant)
+            for variant in (
+                product
+                if product._name == "product.product"
+                else product.product_variant_ids
+            )
+        )
         if product.show_next_provisioning_date and free_qty <= 0:
             company = website.company_id
             provisioning_date = product._get_next_provisioning_date(company)
