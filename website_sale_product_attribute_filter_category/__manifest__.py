@@ -3,7 +3,7 @@
 {
     "name": "Website Sale Attribute Filter Category",
     "summary": "Allow group attributes in shop by categories",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "development_status": "Production/Stable",
     "category": "Website",
     "website": "https://github.com/OCA/e-commerce",
@@ -11,7 +11,7 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "depends": ["website_sale_comparison"],
+    "depends": ["website_sale"],
     "data": [
         "views/templates.xml",
         "views/website_sale_product_attribute_filter_category_view.xml",

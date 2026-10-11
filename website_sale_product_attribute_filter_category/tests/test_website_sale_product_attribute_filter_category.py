@@ -4,7 +4,7 @@ from odoo import Command
 from odoo.tests import tagged
 from odoo.tests.common import HttpCase
 
-from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+from odoo.addons.base.tests.common import DISABLED_MAIL_CREATE_CONTEXT
 
 
 @tagged("post_install", "-at_install")
@@ -12,7 +12,7 @@ class WebsiteSaleAttributeFilterCategoryHttpCase(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CREATE_CONTEXT))
         # Models
         AttributeCategory = cls.env["product.attribute.category"]
         ProductAttribute = cls.env["product.attribute"]

@@ -4,7 +4,7 @@
         <field name="model">product.attribute.category</field>
         <field
             name="inherit_id"
-            ref="website_sale_comparison.product_attribute_category_tree_view"
+            ref="website_sale.product_attribute_category_tree_view"
         />
         <field name="priority" eval="999" />
         <field name="arch" type="xml">

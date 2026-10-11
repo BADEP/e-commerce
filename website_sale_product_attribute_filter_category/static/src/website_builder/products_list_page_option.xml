@@ -7,7 +7,7 @@
     >
         <BuilderRow label.translate="Collapse sidebar sections" position="before">
             <BuilderRow
-                t-if="isActiveItem('attributes_opt') or isActiveItem('attributes_opt_top')"
+                t-if="this.isActiveItem('attributes_opt') or this.isActiveItem('attributes_opt_top')"
                 label.translate="Group by categories"
             >
                 <BuilderCheckbox
