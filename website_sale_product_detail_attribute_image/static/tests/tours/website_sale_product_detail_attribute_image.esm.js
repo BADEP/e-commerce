@@ -4,16 +4,16 @@
 import {registry} from "@web/core/registry";
 
 registry.category("web_tour.tours").add("website_sale_product_detail_attribute_image", {
-    url: "/shop",
-    steps: () => [
-        {
-            trigger: "a:contains('Customizable Desk')",
-            run: "click",
-            expectUnloadPage: true,
-        },
-        {
-            trigger:
-                ".product-detail-attributes:has(span:contains('Policy One Value 1')):not(:has(span:contains('Dangerousness'))):has(span:contains('Policy One Value 1 for website'))",
-        },
-    ],
+  url: "/shop",
+  steps: () => [
+    {
+      trigger: "a:contains('Customizable Desk')",
+      run: "click",
+      expectUnloadPage: true,
+    },
+    {
+      trigger:
+        ".product-detail-attributes:has(span:contains('Policy One Value 1')):not(:has(span:contains('Dangerousness'))):has(span:contains('Policy One Value 1 for website'))",
+    },
+  ],
 });
