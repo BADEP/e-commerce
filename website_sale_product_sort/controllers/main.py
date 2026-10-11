@@ -2,7 +2,6 @@
 # Copyright 2021 Tecnativa - Pedro M. Baeza
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 from odoo import http
-from odoo.http import request
 
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 
@@ -12,7 +11,7 @@ class WebsiteSale(WebsiteSale):
         """We can configure default sort criteria for every website"""
         if post.get("order"):
             return super()._get_search_order(post)
-        order = request.website.default_product_sort_criteria
+        order = self.env.website.default_product_sort_criteria
         return f"is_published desc, {order}, id desc"
 
     @http.route(type="http")
@@ -22,6 +21,6 @@ class WebsiteSale(WebsiteSale):
             page=page, category=category, search=search, ppg=ppg, **post
         )
         response.qcontext["order"] = (
-            post.get("order") or request.website.default_product_sort_criteria
+            post.get("order") or self.env.website.default_product_sort_criteria
         )
         return response
