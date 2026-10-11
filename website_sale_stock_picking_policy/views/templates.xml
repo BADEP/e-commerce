@@ -13,9 +13,8 @@
             position="before"
         >
             <t t-if="order._has_deliverable_products()">
-                <t t-call="website_sale_stock_picking_policy.picking_policy_form">
-                    <t t-set="selected_picking_policy" t-value="order.picking_policy" />
-                </t>
+                <t t-call="website_sale_stock_picking_policy.picking_policy_form"
+                    selected_picking_policy="order.picking_policy"/>
             </t>
         </xpath>
     </template>

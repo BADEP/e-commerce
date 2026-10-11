@@ -13,6 +13,8 @@ from odoo.addons.website_sale_stock_picking_policy.controllers.main import (
 
 
 class TestWebsiteSaleStockPickingPolicy(BaseCommon):
+    _test_user_groups = None
+
     REQUEST_PATCH_PATH = (
         "odoo.addons.website_sale_stock_picking_policy.controllers.main.request"
     )
