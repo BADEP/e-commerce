@@ -25,6 +25,7 @@ class Website(models.Model):
                 website.show_line_subtotals_tax_selection = partner_tax_selection
         else:
             return super()._compute_show_line_subtotals_tax_selection()
+        return None
 
     def _get_current_website_tax_selection_partner(self):
         """Return the partner used to resolve website tax display preference.
