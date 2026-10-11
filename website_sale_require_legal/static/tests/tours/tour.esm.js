@@ -11,7 +11,7 @@ registry.category("web_tour.tours").add("website_sale_require_legal_with_payment
     ...tourUtils.searchProduct("Legal Test Product", {select: true}),
     {
       content: "click on add to cart",
-      trigger: "#product_detail form #add_to_cart",
+      trigger: '.js_product button[name="add_to_cart"]',
       run: "click",
     },
     tourUtils.goToCart(),
@@ -85,7 +85,7 @@ registry.category("web_tour.tours").add("website_sale_require_legal", {
     ...tourUtils.searchProduct("Legal Test Product", {select: true}),
     {
       content: "click on add to cart",
-      trigger: "#product_detail form #add_to_cart",
+      trigger: '.js_product button[name="add_to_cart"]',
       run: "click",
     },
     tourUtils.goToCart(),
