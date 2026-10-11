@@ -20,7 +20,7 @@ class Website(http.Controller):
                 ("published_in_product_category_snippet", "=", True),
                 "|",
                 ("snippet_website_ids", "=", False),
-                ("snippet_website_ids", "=", request.website.id),
+                ("snippet_website_ids", "=", self.env.website.id),
             ]
         )
         keep = QueryURL("/shop", category=0)

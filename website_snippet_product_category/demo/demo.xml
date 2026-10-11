@@ -13,7 +13,7 @@
         <field name="published_in_product_category_snippet" eval="True" />
         <field
             name="image_128"
-            type="base64"
+            type="bytes"
             file="website_snippet_product_category/static/img/boxes_32.png"
         />
     </record>

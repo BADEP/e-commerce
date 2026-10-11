@@ -5,7 +5,10 @@
         <field name="model">product.public.category</field>
         <field name="inherit_id" ref="website_sale.product_public_category_form_view" />
         <field name="arch" type="xml">
-            <field name="sequence" position="after">
+            <xpath
+                expr="//field[@name='parent_id']/../field[@name='website_id']"
+                position="after"
+            >
                 <field
                     name="published_in_product_category_snippet"
                     widget="boolean_toggle"
@@ -17,7 +20,7 @@
                     groups="website.group_multi_website"
                     placeholder="Empty means all websites"
                 />
-            </field>
+            </xpath>
         </field>
     </record>
     <record id="product_public_category_tree_view" model="ir.ui.view">
