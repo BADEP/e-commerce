@@ -4,7 +4,7 @@
     "name": "Website Sale Hide No Variant Attributes",
     "summary": "Exclude non-variant-defining attributes from the variant "
     "selector and its exclusion rules",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "development_status": "Beta",
     "category": "Website",
     "website": "https://github.com/OCA/e-commerce",

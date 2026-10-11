@@ -5,13 +5,10 @@
         inherit_id="website_sale.variants"
         name="Variant selector: hide non-variant-defining attributes"
     >
-        <xpath
-            expr="//t[@t-set='has_configurable_attribute_line']"
-            position="attributes"
-        >
+        <xpath expr="//ul[@t-att-data-attribute-exclusions]" position="attributes">
             <attribute
-                name="t-value"
-            >any(ptal._is_configurable() for ptal in product.attribute_line_ids._without_no_variant_attributes())</attribute>
+                name="t-attf-class"
+            >o_wsale_product_page_variants d-flex flex-column gap-4 list-unstyled js_add_cart_variants #{ul_class} #{'d-none' if not product.valid_product_template_attribute_line_ids._without_no_variant_attributes() else '' }</attribute>
         </xpath>
         <xpath
             expr="//t[@t-foreach='product.valid_product_template_attribute_line_ids']"

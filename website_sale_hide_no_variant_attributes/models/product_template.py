@@ -7,14 +7,8 @@ from odoo import models
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    def _get_attribute_exclusions(
-        self, parent_combination=None, parent_name=None, combination_ids=None
-    ):
-        result = super()._get_attribute_exclusions(
-            parent_combination=parent_combination,
-            parent_name=parent_name,
-            combination_ids=combination_ids,
-        )
+    def _get_attribute_exclusions(self, combination_ids=None):
+        result = super()._get_attribute_exclusions(combination_ids=combination_ids)
         no_variant_ptav_ids = set(
             self.attribute_line_ids.filtered(
                 lambda line: line.attribute_id.create_variant == "no_variant"
@@ -35,14 +29,6 @@ class ProductTemplate(models.Model):
             )
             for ptav_id, excluded_ids in result["exclusions"].items()
         }
-        result["parent_exclusions"] = {
-            parent_ptav_id: [
-                excluded_id
-                for excluded_id in excluded_ids
-                if excluded_id not in no_variant_ptav_ids
-            ]
-            for parent_ptav_id, excluded_ids in result["parent_exclusions"].items()
-        }
         result["mapped_attribute_names"] = {
             ptav_id: name
             for ptav_id, name in result["mapped_attribute_names"].items()
@@ -57,6 +43,8 @@ class ProductTemplate(models.Model):
         add_qty=1.0,
         uom_id=False,
         only_template=False,
+        pricelist=None,
+        fiscal_position=None,
     ):
         combination_info = super()._get_combination_info(
             combination=combination,
@@ -64,6 +52,8 @@ class ProductTemplate(models.Model):
             add_qty=add_qty,
             uom_id=uom_id,
             only_template=only_template,
+            pricelist=pricelist,
+            fiscal_position=fiscal_position,
         )
         if combination_info.get("is_combination_possible"):
             return combination_info

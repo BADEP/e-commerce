@@ -35,7 +35,7 @@ registry.category("web_tour.tours").add("website_sale_hide_no_variant_attributes
     },
     {
       content: "Add the product to the cart.",
-      trigger: "#add_to_cart",
+      trigger: '.js_product button[name="add_to_cart"]',
       run: "click",
     },
     {

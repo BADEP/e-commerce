@@ -62,13 +62,8 @@ class TestWebsiteSaleHideNoVariantAttributesTour(HttpCase):
         informational_ptav_wool = cls.product.attribute_line_ids.filtered(
             lambda line: line.attribute_id == cls.informational_attribute
         ).product_template_value_ids.filtered(lambda ptav: ptav.name == "Wool")
-        informational_ptav_wool.exclude_for = [
-            Command.create(
-                {
-                    "product_tmpl_id": cls.product.id,
-                    "value_ids": [Command.link(variant_ptav_large.id)],
-                }
-            )
+        informational_ptav_wool.excluded_value_ids = [
+            Command.link(variant_ptav_large.id)
         ]
 
     def test_hide_no_variant_attributes(self):

@@ -61,15 +61,10 @@ class TestWebsiteSaleHideNoVariantAttributes(TransactionCase):
         cls.informational_ptav_wool = cls.product.attribute_line_ids.filtered(
             lambda line: line.attribute_id == cls.informational_attribute
         ).product_template_value_ids.filtered(lambda ptav: ptav.name == "Wool")
-        cls.informational_ptav_wool.exclude_for = [
-            Command.create(
-                {
-                    "product_tmpl_id": cls.product.id,
-                    "value_ids": [Command.link(cls.variant_ptav_large.id)],
-                }
-            )
+        cls.informational_ptav_wool.excluded_value_ids = [
+            Command.link(cls.variant_ptav_large.id)
         ]
-        cls.website = cls.env["website"].get_current_website()
+        cls.website = cls.env.ref("base.default_website")
 
     def test_exclusions_ignore_informational_attribute(self):
         exclusions = self.product._get_attribute_exclusions()["exclusions"]
@@ -90,8 +85,9 @@ class TestWebsiteSaleHideNoVariantAttributes(TransactionCase):
         # informational attribute's input is never rendered, the browser can
         # never submit a value for it again, so the combination only carries
         # the variant-defining value.
-        with MockRequest(self.env, website=self.website):
-            combination_info = self.product._get_combination_info(
+        product = self.product.with_context(website_id=self.website.id)
+        with MockRequest(product.env, website=self.website):
+            combination_info = product._get_combination_info(
                 combination=self.variant_ptav_large
             )
         self.assertTrue(combination_info["is_combination_possible"])
@@ -101,8 +97,7 @@ class TestWebsiteSaleHideNoVariantAttributes(TransactionCase):
         # default value for the hidden informational attribute; here that
         # default happens to be the "Wool" value excluded by the rule above.
         combination = self.variant_ptav_large | self.informational_ptav_wool
-        with MockRequest(self.env, website=self.website):
-            combination_info = self.product._get_combination_info(
-                combination=combination
-            )
+        product = self.product.with_context(website_id=self.website.id)
+        with MockRequest(product.env, website=self.website):
+            combination_info = product._get_combination_info(combination=combination)
         self.assertTrue(combination_info["is_combination_possible"])
