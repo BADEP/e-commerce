@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template
         id="compare_page_hide_price"
@@ -7,8 +7,8 @@
         <xpath expr="//span[del[contains(@t-out,'list_price')]]" position="before">
             <t t-set="user_authenticated" t-value="user_id != website.user_id" />
             <div
-                class="alert alert-info"
                 t-if="product.website_hide_price and (product.website_hide_price_message or website.website_hide_price_default_message) and user_authenticated"
+                class="alert alert-info"
             >
                 <i class="fa fa-info-circle" />
                 <span
