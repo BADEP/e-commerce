@@ -8,7 +8,7 @@
         </xpath>
     </template>
     <template id="base_unit_price" inherit_id="website_sale.base_unit_price">
-        <xpath expr="//span[hasclass('o_base_unit_price')]" position="attributes">
+        <xpath expr="//small[hasclass('o_product_price_unit')]" position="attributes">
             <attribute name="t-if">
                 website and website.website_show_price and not product.website_hide_price
             </attribute>
@@ -23,19 +23,19 @@
     </template>
     <!-- Hide Add To Cart Button and quantity selector if not website_show_price -->
     <template id="product" inherit_id="website_sale.cta_wrapper">
-        <xpath expr="//a[@id='add_to_cart']" position="before">
+        <xpath expr="//button[@data-action='add_to_cart']" position="before">
             <t t-set="user_authenticated" t-value="user_id != website.user_id" />
             <div
                 t-if="(product.website_hide_price or website.website_hide_price) and (product.website_hide_price_message or website.website_hide_price_default_message) and user_authenticated"
                 class="alert alert-info"
             >
-                <i class="fa fa-info-circle" />
+                <i class="oi" data-icon="info" />
                 <span
                     t-out="product.website_hide_price_message or website.website_hide_price_default_message"
                 />
             </div>
         </xpath>
-        <xpath expr="//a[@id='add_to_cart']" position="attributes">
+        <xpath expr="//button[@data-action='add_to_cart']" position="attributes">
             <attribute name="t-if">
                 website and website.website_show_price and not product.website_hide_price
             </attribute>
@@ -53,7 +53,7 @@
     </template>
     <!-- Hide buy now button if "Buy Now Button" option is enabled and not website_show_price -->
     <template id="product_buy_now" inherit_id="website_sale.product_buy_now">
-        <xpath expr="//a[hasclass('o_we_buy_now')]" position="attributes">
+        <xpath expr="//button[@data-action='buy_now']" position="attributes">
             <attribute name="t-if">
                 website.website_show_price and not product.website_hide_price
             </attribute>

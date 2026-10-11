@@ -21,6 +21,8 @@ class ProductTemplate(models.Model):
         add_qty=1,
         uom_id=False,
         only_template=False,
+        pricelist=None,
+        fiscal_position=None,
     ):
         combination_info = super()._get_combination_info(
             combination=combination,
@@ -28,6 +30,8 @@ class ProductTemplate(models.Model):
             add_qty=add_qty,
             uom_id=uom_id,
             only_template=only_template,
+            pricelist=pricelist,
+            fiscal_position=fiscal_position,
         )
         combination_info.update(
             {
@@ -42,9 +46,7 @@ class ProductTemplate(models.Model):
         results_data = super()._search_render_results(
             fetch_fields, mapping, icon, limit
         )
-        website_show_price = (
-            self.env["website"].get_current_website().website_show_price
-        )
+        website_show_price = self.env.website.website_show_price
         for product, data in zip(self, results_data, strict=True):
             if product.website_hide_price or not website_show_price:
                 data.update(
@@ -56,10 +58,8 @@ class ProductTemplate(models.Model):
                 )
         return results_data
 
-    def _website_show_quick_add(self):
-        website_show_price = (
-            self.env["website"].get_current_website().website_show_price
-        )
+    def _website_show_quick_add(self, product=None):
+        website_show_price = self.env.website.website_show_price
         return (
             website_show_price and not self.website_hide_price
-        ) and super()._website_show_quick_add()
+        ) and super()._website_show_quick_add(product=product)
