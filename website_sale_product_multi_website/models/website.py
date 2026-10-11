@@ -12,14 +12,14 @@ class Website(models.Model):
         if self.env.context.get("multi_website_domain"):
             target_website_ids = self.ids
 
-            def to_sql(model, alias, query):
+            def to_sql(table):
                 domain = Domain("website_ids", "=", False) | Domain(
                     "website_ids", "in", target_website_ids
                 )
                 # Full optimization is needed to turn the '=' False leaf into
                 # something the many2many field can translate to SQL, the same
                 # processing regular searches apply before calling _to_sql().
-                return domain.optimize_full(model)._to_sql(model, alias, query)
+                return domain.optimize_full(table._model)._to_sql(table)
 
             # Unlike website_id, website_ids has no SQL column of its own, so
             # a plain Domain evaluated in-memory (e.g. filtered_domain(), used

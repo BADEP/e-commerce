@@ -24,10 +24,7 @@
         <field name="model">product.product</field>
         <field name="inherit_id" ref="website_sale.product_product_website_tree_view" />
         <field name="arch" type="xml">
-            <field name="website_id" position="attributes">
-                <attribute name="column_invisible">1</attribute>
-            </field>
-            <field name="website_id" position="after">
+            <field name="name" position="after">
                 <field
                     name="website_ids"
                     groups="website.group_multi_website"
