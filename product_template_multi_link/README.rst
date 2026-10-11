@@ -21,13 +21,13 @@ Product Multi Links (Template)
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fe--commerce-lightgray.png?logo=github
-    :target: https://github.com/OCA/e-commerce/tree/19.0/product_template_multi_link
+    :target: https://github.com/OCA/e-commerce/tree/20.0/product_template_multi_link
     :alt: OCA/e-commerce
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/e-commerce-19-0/e-commerce-19-0-product_template_multi_link
+    :target: https://translation.odoo-community.org/projects/e-commerce-20-0/e-commerce-20-0-product_template_multi_link
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/e-commerce&target_branch=19.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/e-commerce&target_branch=20.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -37,10 +37,10 @@ between products templates.
 
 This module adds two types of links :
 
-- **Cross Selling** : suggest your customer to purchase an additional
-  product
-- **Up Selling** : suggest your customers to purchase a higher-end
-  product, an upgrade, etc.
+-  **Cross Selling** : suggest your customer to purchase an additional
+   product
+-  **Up Selling** : suggest your customers to purchase a higher-end
+   product, an upgrade, etc.
 
 These types of links are common in e-commerce shops.
 
@@ -61,41 +61,40 @@ Link (Variants), in the same OCA / e-commerce repository.
 Usage
 =====
 
-- To mass edit or create links between products templates, Go to Sale >
-  Configuration > Products > Product Links
+-  To mass edit or create links between products templates, Go to Sale >
+   Configuration > Products > Product Links
 
-|Product link list|
+.. image:: https://raw.githubusercontent.com/static/description/product_template_link_tree.png
+   :alt: Product link list
 
 A kanban view is also available
 
-|Product link kanban|
+.. image:: https://raw.githubusercontent.com/static/description/product_template_link_kanban.png
+   :alt: Product link kanban
 
-- You can manage links by product, Go to Sales > Sales > Products and
-  select a product
+-  You can manage links by product, Go to Sales > Sales > Products and
+   select a product
 
-|Product form|
+.. image:: https://raw.githubusercontent.com/static/description/product_template_form.png
+   :alt: Product form
 
-- You can so add new item, line by line, via an editable tree view
+-  You can so add new item, line by line, via an editable tree view
 
-|Product link list edit|
-
-.. |Product link list| image:: https://raw.githubusercontent.com/static/description/product_template_link_tree.png
-.. |Product link kanban| image:: https://raw.githubusercontent.com/static/description/product_template_link_kanban.png
-.. |Product form| image:: https://raw.githubusercontent.com/static/description/product_template_form.png
-.. |Product link list edit| image:: https://raw.githubusercontent.com/static/description/product_template_link_tree_edit.png
+.. image:: https://raw.githubusercontent.com/static/description/product_template_link_tree_edit.png
+   :alt: Product link list edit
 
 Known issues / Roadmap
 ======================
 
-- This module links templates together. 'product_multi_link' links
-  variants together. We could, in a next version of Odoo, include
-  variants features in that module, and adding a new group in 'Manage
-  Product Variant Links'.
-- Develop another module product_template_multi_link_customer, that adds
-  a new type of link named 'customer'. Those links could be generated
-  automatically by scheduled cron task, analyzing sale.order.line. Odoo
-  could create so, the 3 most products sold when a given product is
-  sold.
+-  This module links templates together. 'product_multi_link' links
+   variants together. We could, in a next version of Odoo, include
+   variants features in that module, and adding a new group in 'Manage
+   Product Variant Links'.
+-  Develop another module product_template_multi_link_customer, that
+   adds a new type of link named 'customer'. Those links could be
+   generated automatically by scheduled cron task, analyzing
+   sale.order.line. Odoo could create so, the 3 most products sold when
+   a given product is sold.
 
 Bug Tracker
 ===========
@@ -103,7 +102,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/e-commerce/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/e-commerce/issues/new?body=module:%20product_template_multi_link%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/e-commerce/issues/new?body=module:%20product_template_multi_link%0Aversion:%2020.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -119,18 +118,12 @@ Authors
 Contributors
 ------------
 
-- Sylvain LE GAL <http://www.twitter.com/legalsylvain>
-- `Binhex <https://binhex.cloud//com>`__:
+-  Sylvain LE GAL <http://www.twitter.com/legalsylvain>
+-  `Binhex <https://binhex.cloud//com>`__:
 
-  - David Luis Mora <d.luis@binhex.cloud>
+   -  David Luis Mora <d.luis@binhex.cloud>
 
-- Vo Hong Thien <thienvh@trobz.com>
-
-Other credits
--------------
-
-The migration of this module from 17.0 to 18.0 was financially supported
-by Camptocamp.
+-  Vo Hong Thien <thienvh@trobz.com>
 
 Maintainers
 -----------
@@ -145,6 +138,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/e-commerce <https://github.com/OCA/e-commerce/tree/19.0/product_template_multi_link>`_ project on GitHub.
+This module is part of the `OCA/e-commerce <https://github.com/OCA/e-commerce/tree/20.0/product_template_multi_link>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

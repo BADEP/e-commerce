@@ -8,6 +8,8 @@ class TestProductTemplateLinker(BaseCommon):
     Tests for product.template.linker
     """
 
+    _test_user_groups = None
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

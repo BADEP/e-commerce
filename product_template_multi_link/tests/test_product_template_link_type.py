@@ -9,6 +9,8 @@ from odoo.addons.base.tests.common import BaseCommon
 
 
 class TestProductTemplateLinkType(BaseCommon):
+    _test_user_groups = None
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -20,10 +22,10 @@ class TestProductTemplateLinkType(BaseCommon):
         cls.link_type_range = cls.LinkType.create(
             {
                 "is_symmetric": False,
-                "name": "Upper Range",
-                "inverse_name": "Lower Range",
-                "code": "upper-range",
-                "inverse_code": "lower-range",
+                "name": "Test Upper Range",
+                "inverse_name": "Test Lower Range",
+                "code": "test-upper-range",
+                "inverse_code": "test-lower-range",
             }
         )
         cls.symmetric_link_without_code = cls.LinkType.create(

@@ -26,7 +26,7 @@
     </record>
     <record id="product_template_link_type_menu" model="ir.ui.menu">
         <field name="name">Product Template Link Type</field>
-        <field name="parent_id" ref="sale.prod_config_main" />
+        <field name="parent_id" ref="sale.product_menu_catalog" />
         <field name="action" ref="product_template_link_type_act_window" />
         <field name="sequence" eval="16" />
     </record>
