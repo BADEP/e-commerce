@@ -13,8 +13,8 @@ from odoo.addons.website_sale.controllers.reorder import CustomerPortal
 
 
 class WebsiteSaleSecondaryUnit(WebsiteSale):
-    def _prepare_product_values(self, product, category, **kwargs):
-        res = super()._prepare_product_values(product, category, **kwargs)
+    def _prepare_product_values(self, product, **kwargs):
+        res = super()._prepare_product_values(product, **kwargs)
         res["secondary_uom_ids"] = product._get_website_secondary_uoms()
         return res
 
@@ -114,7 +114,7 @@ class ProductConfiguratorSecondaryUnit(WebsiteSaleProductConfiguratorController)
         the selected unit, just like the standard unit of measure selector does.
         """
         secondary_uom_id = int(secondary_uom_id or 0)
-        secondary_uom = request.env["product.secondary.unit"].browse(
+        secondary_uom = self.env["product.secondary.unit"].browse(
             secondary_uom_id or []
         )
         if secondary_uom:
@@ -155,15 +155,12 @@ class CustomerPortalSecondaryUnit(CustomerPortal):
             return super().my_orders_reorder(order_id, access_token=access_token)
         lines_to_reorder = order_sudo.order_line.filtered(
             # Skip section headers, deliveries, event tickets, ...
-            lambda line: line.with_user(request.env.user).sudo()._is_reorder_allowed()
+            lambda line: line.with_user(self.env.user).sudo()._is_reorder_allowed()
         )
         if not lines_to_reorder:
-            raise ValidationError(
-                request.env._("Nothing can be reordered in this order")
-            )
+            raise ValidationError(self.env._("Nothing can be reordered in this order"))
         cart_controller = Cart()
-        cart_sudo = request.cart or request.website._create_cart()
-        warnings_to_aggregate = set()
+        cart_sudo = request.cart or self.env.website._create_cart()
         values = {"tracking_info": []}
         for line in lines_to_reorder:
             cart_values = cart_controller.add_to_cart(
@@ -188,13 +185,9 @@ class CustomerPortalSecondaryUnit(CustomerPortal):
                 # already expressed in the product unit of measure.
                 qty_in_secondary_uom=False,
             )
-            if not cart_values["quantity"]:
-                # Only aggregate order warnings
-                warnings_to_aggregate.add(cart_sudo.shop_warning)
             values["tracking_info"].extend(cart_values["tracking_info"])
-        if warnings_to_aggregate:
-            cart_sudo.shop_warning = "\n".join(warnings_to_aggregate)
         values["cart_quantity"] = cart_sudo.cart_quantity
+        values["currency"] = cart_sudo.currency_id.name
         return values
 
     def _prepare_reorder_linked_products(self, line):

@@ -21,7 +21,7 @@ registry.category("web_tour.tours").add("website_sale_secondary_unit_configurato
     },
     // The product has optional products, so the configurator is opened.
     {
-      trigger: "#add_to_cart",
+      trigger: '.js_product button[name="add_to_cart"]',
       run: "click",
     },
     // The unit chosen on the product page is kept, and can be changed.

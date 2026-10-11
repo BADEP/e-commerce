@@ -3,7 +3,7 @@
 from odoo import Command
 from odoo.tests.common import HttpCase, tagged
 
-from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+from odoo.addons.base.tests.common import DISABLED_MAIL_CREATE_CONTEXT
 
 
 @tagged("post_install", "-at_install")
@@ -11,7 +11,7 @@ class WebsiteSaleSecondaryUnitHttpCase(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CREATE_CONTEXT))
         # Models
         ProductSecondaryUnit = cls.env["product.secondary.unit"]
         product_uom_unit = cls.env.ref("uom.product_uom_unit")

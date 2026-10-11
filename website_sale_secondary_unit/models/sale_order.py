@@ -1,7 +1,6 @@
 # Copyright 2019 Tecnativa - Sergio Teruel
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 from odoo import models
-from odoo.tools.float_utils import float_round
 
 
 class SaleOrder(models.Model):
@@ -41,10 +40,7 @@ class SaleOrder(models.Model):
         secondary_uom_id = int(kwargs.get("secondary_uom_id") or 0)
         if secondary_uom_id and qty_in_secondary_uom:
             secondary_uom = self.env["product.secondary.unit"].browse(secondary_uom_id)
-            quantity = float_round(
-                quantity * secondary_uom.factor,
-                precision_rounding=product.uom_id.rounding,
-            )
+            quantity = product.uom_id.round(quantity * secondary_uom.factor)
         return super()._cart_add(product_id, quantity, uom_id=uom_id, **kwargs)
 
     def _cart_find_product_line(

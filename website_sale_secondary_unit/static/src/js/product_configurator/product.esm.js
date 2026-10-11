@@ -1,17 +1,15 @@
 /* Copyright 2025 Tecnativa - Carlos Roca
  * License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). */
 
-import {Product} from "@sale/js/product/product";
+import {Product, productProps} from "@sale/js/product/product";
 import {patch} from "@web/core/utils/patch";
+import {t} from "@odoo/owl";
 
-patch(Product, {
-  props: {
-    ...Product.props,
-    allow_uom_sell: {type: Boolean, optional: true},
-    default_secondary_uom_id: {type: Number, optional: true},
-    secondary_uom_id: {type: Number, optional: true},
-    secondary_uoms: {type: Array, optional: true},
-  },
+Object.assign(productProps, {
+  allow_uom_sell: t.boolean().optional(),
+  default_secondary_uom_id: t.or([t.number(), t.literal(false)]).optional(),
+  secondary_uom_id: t.number().optional(),
+  secondary_uoms: t.array().optional(),
 });
 
 patch(Product.prototype, {
