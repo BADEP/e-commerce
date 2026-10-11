@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <!-- Odoo 19 removed the "keep in wishlist" checkbox from
         website_sale_wishlist (see odoo/odoo@b414047), so this module
@@ -11,7 +11,7 @@
         <xpath expr="//div[hasclass('o_wishlist_products_header')]" position="after">
             <div class="checkbox mb-3">
                 <label class="text-muted">
-                    <input type="checkbox" id="b2b_wish" value="1" class="mr8" />
+                    <input id="b2b_wish" class="mr8" type="checkbox" value="1" />
                     Add product to my cart but keep it in my wishlist
                 </label>
             </div>
