@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 from odoo.tests import HttpCase, tagged
 
-from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+from odoo.addons.base.tests.common import DISABLED_MAIL_CREATE_CONTEXT
 
 
 @tagged("post_install", "-at_install")
@@ -10,7 +10,7 @@ class WebsiteSaleHttpCase(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CREATE_CONTEXT))
         cls.ProductAttribute = cls.env["product.attribute"]
         cls.ProductAttributeValue = cls.env["product.attribute.value"]
         cls.ProductAttributeLine = cls.env["product.template.attribute.line"]
@@ -31,7 +31,7 @@ class WebsiteSaleHttpCase(HttpCase):
         )
         cls.product_template = cls.env["product.template"].create(
             {
-                "name": "Customizable Desk",
+                "name": "Attribute Image Desk",
                 "type": "consu",
                 "is_published": True,
             }
@@ -94,7 +94,7 @@ class WebsiteSaleHttpCase(HttpCase):
     def test_ui_website(self):
         """Test frontend tour."""
         self.start_tour(
-            "/",
+            "/shop?search=Attribute+Image+Desk",
             "website_sale_product_detail_attribute_image",
             login="admin",
             timeout=200,

@@ -4,10 +4,10 @@
 import {registry} from "@web/core/registry";
 
 registry.category("web_tour.tours").add("website_sale_product_detail_attribute_image", {
-  url: "/shop",
+  url: "/shop?search=Attribute+Image+Desk",
   steps: () => [
     {
-      trigger: "a:contains('Customizable Desk')",
+      trigger: "a:contains('Attribute Image Desk')",
       run: "click",
       expectUnloadPage: true,
     },

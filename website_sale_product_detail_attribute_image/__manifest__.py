@@ -4,7 +4,7 @@
 {
     "name": "Website Sale Product Detail Attribute Image",
     "summary": "Display attributes images in shop product detail",
-    "version": "19.0.1.0.1",
+    "version": "20.0.1.0.0",
     "development_status": "Production/Stable",
     "category": "Website",
     "website": "https://github.com/OCA/e-commerce",
@@ -22,8 +22,10 @@
             "/website_sale_product_detail_attribute_image/static/src/scss/style.scss",
         ],
         "web.assets_tests": [
-            "/website_sale_product_detail_attribute_image/static/tests/tours"
-            "/website_sale_product_detail_attribute_image.esm.js",
+            (
+                "/website_sale_product_detail_attribute_image/static/tests/tours"
+                "/website_sale_product_detail_attribute_image.esm.js"
+            ),
         ],
     },
 }
