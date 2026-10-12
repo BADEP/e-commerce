@@ -3,7 +3,7 @@
 {
     "name": "Website Sale Product Document Variant",
     "summary": "Publish and refresh variant-specific documents on the product page",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "development_status": "Beta",
     "category": "Website",
     "website": "https://github.com/OCA/e-commerce",
