@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Odoo 19 removed the "keep in wishlist" checkbox from
+        website_sale_wishlist (see odoo/odoo@b414047), so this module
+        has to add it back. Since Odoo 20 the wishlist is part of website_sale. -->
+    <template
+        id="wishlist_keep_checkbox"
+        name="Wishlist keep in cart checkbox"
+        inherit_id="website_sale.product_wishlist"
+    >
+        <xpath expr="//div[hasclass('o_wishlist_products_header')]" position="after">
+            <div class="checkbox mb-3">
+                <label class="text-muted">
+                    <input id="b2b_wish" class="mr8" type="checkbox" value="1" />
+                    Add product to my cart but keep it in my wishlist
+                </label>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- This view is set as customize_show because
+        the test of website_sale_wishlist needs the
+        checkbox as not selected -->
+    <template
+        id="default_active_b2b_wish"
+        name="Keep items on wishlist"
+        inherit_id="website_sale_wishlist_keep.wishlist_keep_checkbox"
+        customize_show="True"
+        active="False"
+    >
+        <xpath expr="//input[@id='b2b_wish']" position="attributes">
+            <attribute name="checked">true</attribute>
+        </xpath>
+    </template>
+</odoo>
