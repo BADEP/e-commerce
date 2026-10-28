@@ -2,7 +2,8 @@
  * Copyright 2025 Carlos Lopez - Tecnativa
  * License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). */
 
-import {WebsiteSale} from "@website_sale/interactions/website_sale";
+import {AddToCart} from "@website_sale/interactions/add_to_cart";
+import {ProductPage} from "@website_sale/interactions/product_page";
 import {patch} from "@web/core/utils/patch";
 
 const SECONDARY_UOM_SELECTOR = 'select[name="secondary_uom_id"]';
@@ -32,14 +33,15 @@ function getSelectedSecondaryUom(el) {
   };
 }
 
-patch(WebsiteSale.prototype, {
+patch(ProductPage.prototype, {
   setup() {
     super.setup(...arguments);
-    Object.assign(this.dynamicContent, {
-      [`.js_main_product ${SECONDARY_UOM_SELECTOR}`]: {
+    this.dynamicContent = {
+      ...this.dynamicContent,
+      [`.js_product ${SECONDARY_UOM_SELECTOR}`]: {
         "t-on-change": this.onChangeAddQuantity,
       },
-    });
+    };
   },
 
   /**
@@ -49,8 +51,8 @@ patch(WebsiteSale.prototype, {
    *
    * @override
    */
-  _getOptionalCombinationInfoParam(product) {
-    const params = super._getOptionalCombinationInfoParam(...arguments);
+  _getOptionalCombinationInfoParams(product) {
+    const params = super._getOptionalCombinationInfoParams(...arguments);
     const secondaryUom = getSelectedSecondaryUom(product);
     if (secondaryUom) {
       const quantity =
@@ -60,19 +62,22 @@ patch(WebsiteSale.prototype, {
     }
     return params;
   },
+});
 
+patch(AddToCart.prototype, {
   /**
    * Add the selected secondary unit to the payload. The quantity is sent as
    * typed by the customer, in secondary units, and converted by the server.
    *
    * @override
    */
-  _updateRootProduct(form) {
-    super._updateRootProduct(...arguments);
-    const secondaryUom = getSelectedSecondaryUom(form);
+  _getOptionalParams(el) {
+    const params = super._getOptionalParams(...arguments);
+    const secondaryUom = getSelectedSecondaryUom(el);
     if (secondaryUom) {
-      this.rootProduct.uomId = secondaryUom.uomId;
-      this.rootProduct.secondary_uom_id = secondaryUom.id;
+      params.uomId = secondaryUom.uomId;
+      params.secondary_uom_id = secondaryUom.id;
     }
+    return params;
   },
 });

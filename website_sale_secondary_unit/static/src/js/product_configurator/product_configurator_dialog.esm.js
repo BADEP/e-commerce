@@ -3,44 +3,33 @@
 
 import {ProductConfiguratorDialog} from "@sale/js/product_configurator_dialog/product_configurator_dialog";
 import {patch} from "@web/core/utils/patch";
-import {useSubEnv} from "@odoo/owl";
-
-patch(ProductConfiguratorDialog, {
-  props: {
-    ...ProductConfiguratorDialog.props,
-    // Sent by the product page, where the customer already chose a unit.
-    secondary_uom_id: {type: Number, optional: true},
-    // Filled in with the unit chosen here, to reach the cart request.
-    secondaryUomSelection: {type: Object, optional: true},
-  },
-});
+import {onWillStart, t, useProps} from "@odoo/owl";
+import {useSubEnv} from "@web/owl2/utils";
 
 patch(ProductConfiguratorDialog.prototype, {
   setup() {
     super.setup(...arguments);
+    this.secondaryUnitProps = useProps({
+      // Sent by the product page, where the customer already chose a unit.
+      secondary_uom_id: t.number().optional(),
+      // Filled in with the unit chosen here, to reach the cart request.
+      secondaryUomSelection: t.object().optional(),
+    });
     useSubEnv({setSecondaryUoM: this._setSecondaryUoM.bind(this)});
+    onWillStart(() => this._preselectSecondaryUoM());
   },
 
   /**
    * Preselect the secondary unit of the main product: the one the customer
    * chose on the product page, or the default one of the product.
-   *
-   * @override
    */
-  async _loadData() {
-    const data = await super._loadData(...arguments);
-    const product = data.products.find(
-      (p) => p.product_tmpl_id === this.props.productTemplateId
-    );
+  async _preselectSecondaryUoM() {
+    const product = this._findProduct(this.env.mainProductTmplId);
     const secondaryUomId =
-      this.props.secondary_uom_id || product?.default_secondary_uom_id;
+      this.secondaryUnitProps.secondary_uom_id || product?.default_secondary_uom_id;
     if (product?.secondary_uoms?.length && secondaryUomId) {
-      // Prices are given for the selected unit, so they have to be
-      // fetched again, which requires a currency.
-      this.currency.id ??= data.currency_id;
-      await this._setSecondaryUoM(product.product_tmpl_id, secondaryUomId, product);
+      await this._setSecondaryUoM(product.product_tmpl_id, secondaryUomId);
     }
-    return data;
   },
 
   /**
@@ -64,7 +53,7 @@ patch(ProductConfiguratorDialog.prototype, {
       product.uom.id
     );
     product.price = parseFloat(combination.price);
-    if (this.props.isFrontend) {
+    if (this.websiteSaleProps?.isFrontend) {
       product.strikethrough_price = combination.strikethrough_price
         ? parseFloat(combination.strikethrough_price)
         : 0;
@@ -79,9 +68,9 @@ patch(ProductConfiguratorDialog.prototype, {
    */
   async onConfirm() {
     const mainProduct = this._findProduct(this.env.mainProductTmplId);
-    if (this.props.secondaryUomSelection && mainProduct.secondary_uoms) {
-      this.props.secondaryUomSelection.secondary_uom_id =
-        mainProduct.secondary_uom_id || false;
+    const selection = this.secondaryUnitProps.secondaryUomSelection;
+    if (selection && mainProduct.secondary_uoms) {
+      selection.secondary_uom_id = mainProduct.secondary_uom_id || false;
     }
     return super.onConfirm(...arguments);
   },

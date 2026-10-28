@@ -3,7 +3,7 @@
 {
     "name": "Website Sale Secondary Unit",
     "summary": "Allow manage secondary units in website shop",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "development_status": "Beta",
     "category": "Website",
     "website": "https://github.com/OCA/e-commerce",
@@ -13,11 +13,10 @@
     "installable": True,
     "depends": ["website_sale", "sale_order_secondary_unit"],
     "data": [
-        "security/ir.model.access.csv",
-        "security/website_sale_secondary_unit.xml",
         "views/product_secondary_unit_views.xml",
         "views/product_template_views.xml",
         "views/templates.xml",
+        "security/ir.access.csv",
     ],
     "demo": ["data/demo.xml"],
     "post_init_hook": "post_init_hook",

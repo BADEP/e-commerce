@@ -19,7 +19,7 @@ registry.category("web_tour.tours").add("website_sale_secondary_unit", {
       run: "edit 2",
     },
     {
-      trigger: "#add_to_cart",
+      trigger: '.js_product button[name="add_to_cart"]',
       run: "click",
     },
     // The notification counts secondary units.
@@ -48,7 +48,7 @@ registry.category("web_tour.tours").add("website_sale_secondary_unit", {
       expectUnloadPage: true,
     },
     {
-      trigger: "#add_to_cart",
+      trigger: '.js_product button[name="add_to_cart"]',
       run: "click",
     },
     // The cart counts secondary units: 2 boxes + 1 unit.
@@ -69,7 +69,8 @@ registry.category("web_tour.tours").add("website_sale_secondary_unit", {
     },
     // Quantities are increased by secondary unit.
     {
-      trigger: ".o_cart_product:contains('Box 5 Units') .css_quantity a:has(.oi-plus)",
+      trigger:
+        ".o_cart_product:contains('Box 5 Units') .css_quantity button[aria-label='Add one']",
       run: "click",
     },
     {

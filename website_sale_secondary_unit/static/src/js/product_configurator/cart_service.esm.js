@@ -15,24 +15,12 @@ patch(CartService.prototype, {
    *
    * @override
    */
-  _openProductConfigurator(
-    productTemplateId,
-    quantity,
-    uomId,
-    combination,
-    productCustomAttributeValues,
-    options,
-    additionalData
-  ) {
-    return super._openProductConfigurator(
-      productTemplateId,
-      quantity,
-      uomId,
-      combination,
-      productCustomAttributeValues,
-      options,
-      {...additionalData, secondaryUomSelection: {}}
-    );
+  _openProductConfigurator(...args) {
+    const additionalData = args.pop();
+    return super._openProductConfigurator(...args, {
+      ...additionalData,
+      secondaryUomSelection: {},
+    });
   },
 
   /**
