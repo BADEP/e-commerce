@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2019 Tecnativa - Sergio Teruel
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
@@ -13,8 +13,8 @@
         <xpath expr="//div[@id='add_to_cart_wrap']" position="inside">
             <select
                 t-if="secondary_uom_ids"
-                name="secondary_uom_id"
                 class="form-select w-auto order-first o_wsale_secondary_uom"
+                name="secondary_uom_id"
                 aria-label="Unit of measure"
                 t-att-data-product-uom-id="product.uom_id.sudo().id"
             >
